@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# El Arcángel
 
-## Getting Started
+Catálogo de santería y regalería con consultas por WhatsApp y administración de productos, categorías, stock y consultas. Next.js, Prisma y PostgreSQL; imágenes en Cloudinary.
 
-First, run the development server:
+## Desarrollo local
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Requisitos: Node.js 24 y Docker Desktop.
+
+1. Copiá `.env.example` a `.env` y completá las variables. Si ya tenés una base local, conservá sus credenciales.
+2. Ejecutá `npm ci`.
+3. Iniciá PostgreSQL con `docker compose up -d` (puerto local 5433).
+4. Ejecutá `npx prisma migrate deploy`. El cliente Prisma se genera automáticamente durante `npm ci`.
+5. Ejecutá `npm run dev` y abrí `http://localhost:3000`.
+
+El acceso al panel es `/login`, usando `ADMIN_PASSWORD`. Los productos se cargan desde el administrador. La importación opcional de ejemplos se documenta en `scripts/import-demo-catalog.mts`; no se ejecuta al instalar.
+
+## Verificaciones
+
+- `npm test`: pruebas unitarias y de componentes.
+- `npm run lint`: revisión de código.
+- `npm run build`: compila para producción.
+- `npm run test:integration`: pruebas contra Next.js y PostgreSQL locales en ejecución. Crea y limpia registros temporales; ver [tests/README.md](tests/README.md).
+
+## Despliegue
+
+Configurá en Vercel las variables de `.env.example`, usando una base PostgreSQL accesible desde el despliegue (no `localhost`). Aplicá `npx prisma migrate deploy` a esa base antes de publicar. La instalación genera el cliente Prisma, pero no modifica la base automáticamente. Las credenciales de Cloudinary son del servidor.
+
+La consulta no reserva stock. Al completar una venta, el servidor valida y descuenta las existencias en una transacción; requiere stock definido y suficiente. Una venta completada no puede cambiar de estado.
+
+## SEO y dominio público
+
+Configurá `SITE_URL` en las variables de entorno de Vercel antes de desplegar:
+
+```env
+SITE_URL=https://tu-proyecto.vercel.app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Reemplazá el ejemplo por la URL pública real, sin rutas adicionales. Al cambiar de dominio, actualizá la variable y volvé a desplegar. No necesita el prefijo `NEXT_PUBLIC_`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Se usa para las URLs can?nicas, Open Graph y `/sitemap.xml`. En Vercel, si no se define `SITE_URL`, se utiliza el dominio de `VERCEL_PROJECT_PRODUCTION_URL` o `VERCEL_URL`. Fuera de Vercel, sin dominio configurado no se generan URLs can?nicas ni entradas del sitemap. El icono es la imagen social predeterminada; los productos usan su propia foto.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+El favicon ICO contiene imágenes PNG **RGBA** de 16, 32, 48 y 256 píxeles. Al regenerarlo con Sharp, usar `.ensureAlpha()` antes de `.png()`; Turbopack rechaza PNG RGB dentro de un ICO.

@@ -1,0 +1,44 @@
+@use '@/styles/variables' as *;
+
+.modalContent {
+    width: min(540px, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 1.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid rgba($border-color, 0.15);
+    border-radius: 16px;
+    background-color: $primary-color;
+    color: $color-text-secondary;
+
+    &::backdrop { background-color: rgba($border-color, 0.55); }
+
+    .modalHeader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        h2 { margin: 0; font-family: $font-family-display; font-size: 28px; font-weight: $font-weight-medium; }
+        button { min-width: 44px; min-height: 44px; border: 0; background: transparent; color: inherit; font-size: 28px; cursor: pointer; &:disabled { opacity: .5; cursor: wait; } }
+    }
+
+    button:focus-visible { outline: 2px solid $secondary-color; outline-offset: 3px; }
+
+    &.modalGallery {
+        width: min(1200px, calc(100% - 2rem));
+        height: calc(100dvh - 2rem);
+        padding: 1rem;
+        overflow: hidden;
+
+        &[open] { display: flex; flex-direction: column; }
+        .modalHeader {
+            flex-shrink: 0;
+            margin-bottom: 0.75rem;
+            h2 { font-size: 24px; }
+            button { flex-shrink: 0; }
+        }
+    }
+}

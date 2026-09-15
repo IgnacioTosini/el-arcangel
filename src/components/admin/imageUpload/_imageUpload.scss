@@ -1,0 +1,11 @@
+@use '@/styles/variables' as *;
+.imageUploadContent {
+    display:flex; align-items:flex-start; gap:1rem; margin:1rem 0;
+    img { width:100px; height:100px; object-fit:cover; border-radius:8px; }
+    > div { min-width:0; display:flex; flex-direction:column; gap:0.5rem; }
+    label { font-size:$font-size-normal; font-weight:$font-weight-semibold; }
+    input { width:100%; min-height:44px; font-size:$font-size-normal; }
+    small,p { font-size:$font-size-small; overflow-wrap:anywhere; }
+    button { margin-left:0; align-self:flex-start; }
+    @media(max-width:540px) { flex-direction:column; }
+}

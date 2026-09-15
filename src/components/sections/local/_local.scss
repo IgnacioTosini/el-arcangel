@@ -1,0 +1,70 @@
+@use '@/styles/variables' as *;
+
+.localContent {
+    max-width: 768px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 7rem;
+    color: $color-text-secondary;
+
+    .localTitle {
+        margin-bottom: 1rem;
+        font-family: $font-family-display;
+        font-size: 48px;
+        font-weight: $font-weight-medium;
+        line-height: 1.15;
+    }
+
+    .localDescription {
+        color: rgba($color-text, 0.7);
+        font-size: $font-size-medium-large;
+        line-height: 1.6;
+    }
+
+    .localDetails {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin: 2.5rem 0;
+
+        .localDetail {
+            dt {
+                margin-bottom: 0.375rem;
+                font-size: $font-size-normal;
+                font-weight: $font-weight-semibold;
+                letter-spacing: 0.025em;
+                line-height: 1.5;
+                text-transform: uppercase;
+            }
+
+            dd {
+                color: rgba($color-text, 0.7);
+                font-size: $font-size-medium;
+                line-height: 1.5;
+
+                a {
+                    color: $color-text-secondary;
+                    font-weight: $font-weight-medium;
+                    text-underline-offset: 4px;
+                    overflow-wrap: anywhere;
+
+                    &:hover {
+                        text-decoration-thickness: 2px;
+                    }
+
+                    &:focus-visible {
+                        outline: 2px solid $secondary-color;
+                        outline-offset: 4px;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 600px) {
+        padding: 2.5rem 1rem 4rem;
+
+        .localTitle {
+            font-size: 40px;
+        }
+    }
+}

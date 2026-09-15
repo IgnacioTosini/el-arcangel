@@ -1,0 +1,66 @@
+@use '@/styles/variables' as *;
+
+.catalogContent {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    color: $color-text-secondary;
+
+    .catalogHeader {
+        margin-bottom: 1.5rem;
+        h1 { margin-bottom: 0.75rem; font-family: $font-family-display; font-size: 40px; font-weight: $font-weight-medium; line-height: 1.2; }
+        p { color: rgba($color-text, 0.7); font-size: $font-size-medium; overflow-wrap: anywhere; }
+    }
+
+    .catalogDesktopFilters { margin-bottom: 2rem; }
+    .catalogMobileFilters { display: none; }
+
+    .catalogGrid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        list-style: none;
+        li { min-width: 0; }
+    }
+
+    .catalogEmpty {
+        padding: 3rem 1rem;
+        text-align: center;
+        h2 { font-family: $font-family-display; font-size: 28px; }
+        p { margin: 1rem 0; }
+    }
+
+    .catalogFeedback { min-height: 1.5rem; margin-top: 1rem; font-size: $font-size-normal; }
+
+    @media (max-width: 1000px) { .catalogGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 700px) {
+        padding: 2rem 1rem 3rem;
+        .catalogDesktopFilters { display: none; }
+        .catalogMobileFilters { display: inline-flex; margin-bottom: 1.5rem; }
+    }
+    @media (max-width: 480px) { .catalogGrid { grid-template-columns: minmax(0, 1fr); } }
+}
+
+.catalogButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.625rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    background-color: transparent;
+    color: $color-text-secondary;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    &:hover { background-color: $tertiary-color; }
+    &:focus-visible { outline: 2px solid $secondary-color; outline-offset: 3px; }
+    &.catalogButtonPrimary {
+        background-color: $color-primary-button;
+        color: $primary-color;
+        &:hover { background-color: $color-hover-primary; }
+    }
+}
+
+.catalogModalActions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }

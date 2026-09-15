@@ -1,0 +1,46 @@
+@use '@/styles/variables' as *;
+.orderCardContent {
+    padding:1rem; border:1px solid rgba($border-color,0.18); border-radius:8px; background:#faf9f4; font-size:$font-size-normal;
+    .orderCardHeader { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; flex-wrap:wrap; p { margin-top:0.4rem; color:rgba($color-text,0.7); font-size:$font-size-small; } select { min-height:44px; padding:0.5rem; border:1px solid rgba($border-color,0.2); border-radius:5px; background:transparent; color:inherit; } }
+    .orderCardComment { margin:1rem 0; }
+    ul { list-style:none; margin:1rem 0; li { display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; padding:0.75rem 0; border-top:1px solid rgba($border-color,0.15); } small { color:rgba($color-text,0.7); } }
+    .orderCardTotal { margin-bottom:1rem; } summary { cursor:pointer; min-height:36px; } details .inlineFieldsContent { margin-top:1rem; }
+}
+
+.orderCardActions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-block: .5rem; }
+
+.orderCardContent a.orderCardWhatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    min-height: 44px;
+    padding: .65rem 1rem;
+    border: 1px solid $secondary-color;
+    border-radius: 8px;
+    background: $secondary-color;
+    color: #fff;
+    font-family: $font-family;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-semibold;
+    line-height: 1.3;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba($border-color, .12);
+    transition: background .18s ease, box-shadow .18s ease;
+
+    svg { flex-shrink: 0; }
+    .orderCardWhatsappArrow { margin-left: .25rem; opacity: .75; }
+    &:hover { background: $color-hover-primary; color: #fff; box-shadow: 0 3px 9px rgba($border-color, .2); }
+    &:focus-visible { outline: 2px solid $secondary-color; outline-offset: 3px; }
+    &:active { box-shadow: none; }
+}
+
+@media (max-width: 600px) {
+    .orderCardHeader .orderCardActions { width: 100%; }
+    .orderCardWhatsapp { flex: 1 1 100%; }
+    .orderCardHeader .orderCardActions select { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orderCardWhatsapp { transition: none; }
+}

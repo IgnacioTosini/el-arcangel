@@ -1,0 +1,214 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ESTADOS DEL PEDIDO
+
+enum OrderStatus {
+  PENDING // Pendiente de revisión
+  COMPLETED // Venta realizada
+  INQUIRY_ONLY // Solo fue una consulta
+  CANCELLED // Cancelado
+}
+
+// TIPO DE COMPRA
+
+enum PurchaseType {
+  RETAIL // Por menor
+  WHOLESALE // Por mayor
+}
+
+// CATÁLOGO
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String? @db.Text
+  imageUrl    String?
+  publicId    String?
+  sortOrder   Int     @default(0)
+  active      Boolean @default(true)
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String  @db.Text
+  material    String?
+  featured    Boolean @default(false)
+  active      Boolean @default(true)
+
+  // Prisma crea la tabla intermedia automáticamente.
+  categories Category[]
+
+  variants ProductVariant[]
+  images   ProductImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductVariant {
+  id           String  @id @default(cuid())
+  sku          String  @unique
+  name         String  @default("Única")
+  aroma        String?
+  color        String?
+  size         String?
+  presentation String?
+
+  // Importes en pesos argentinos.
+  // price null = consultar precio.
+  price          Decimal? @db.Decimal(12, 2)
+  compareAtPrice Decimal? @db.Decimal(12, 2)
+
+  // null = disponibilidad a confirmar.
+  // 0 = agotado.
+  stock Int?
+
+  active    Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, active])
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  url       String
+  publicId  String
+  alt       String?
+  sortOrder Int     @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, sortOrder])
+}
+
+// CARRITO
+
+model Cart {
+  id String @id @default(cuid())
+
+  // Hash del token que identifica al visitante.
+  sessionTokenHash String @unique
+
+  purchaseType PurchaseType @default(RETAIL)
+
+  items CartItem[]
+
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([expiresAt])
+}
+
+model CartItem {
+  id       String @id @default(cuid())
+  quantity Int    @default(1)
+
+  cartId String
+  cart   Cart   @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Una variante aparece una sola vez en cada carrito.
+  @@unique([cartId, variantId])
+  @@index([variantId])
+}
+
+// PEDIDOS Y CONSULTAS
+
+model Order {
+  id String @id @default(cuid())
+
+  // Número legible para el vendedor y el mensaje de WhatsApp.
+  number Int @unique @default(autoincrement())
+
+  // Evita duplicados al reintentar la misma solicitud.
+  idempotencyKey String @unique
+
+  customerName  String
+  customerPhone String
+  businessName  String?
+  customerNote  String? @db.Text
+  adminNote     String? @db.Text
+
+  status OrderStatus @default(PENDING)
+
+  purchaseType PurchaseType @default(RETAIL)
+
+  // Total inicial; null si algún artículo no tiene precio.
+  estimatedTotal Decimal? @db.Decimal(12, 2)
+
+  // Importe real acordado al concretar la venta.
+  finalTotal Decimal? @db.Decimal(12, 2)
+
+  items OrderItem[]
+
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  quantity Int
+
+  // Copias históricas de los datos al crear el pedido.
+  productName String
+  variantName String
+  sku         String
+  unitPrice   Decimal? @db.Decimal(12, 2)
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Opcional para conservar el historial si se borra la variante.
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([variantId])
+}
+
+model SiteSettings {
+  id String @id @default("store")
+  name String @default("El Arcángel")
+  whatsapp String @default("")
+  instagram String @default("https://www.instagram.com/elarcangelelarcangel/")
+  address String @default("")
+  hours String @default("")
+  wholesaleText String @default("Venta por mayor y menor. Las condiciones mayoristas (cantidades, precios y entregas) se confirman por consulta.")
+}

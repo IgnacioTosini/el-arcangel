@@ -1,0 +1,32 @@
+@use '@/styles/variables' as *;
+
+.faqContent {
+    .faqTitle {
+        margin-bottom: 1.5rem;
+        color: $color-text-secondary;
+        font-family: $font-family-display;
+        font-size: $font-size-xlarge;
+        font-weight: $font-weight-medium;
+        line-height: 1.2;
+    }
+
+    .faqList {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+
+        .faqItem {
+            font-size: $font-size-medium;
+            line-height: 1.5;
+
+            .faqQuestion {
+                color: $color-text-secondary;
+                font-weight: $font-weight-semibold;
+            }
+
+            .faqAnswer {
+                color: rgba($color-text, 0.7);
+            }
+        }
+    }
+}

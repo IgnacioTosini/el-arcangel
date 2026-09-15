@@ -1,0 +1,9 @@
+@use '@/styles/variables' as *;
+.categorySelect {
+    position: relative; margin: 1.25rem 0; max-width: 100%; font-size: $font-size-normal;
+    > span { display: block; margin-bottom: .5rem; }
+    .categorySelectTrigger { display: flex; width: 100%; justify-content: space-between; gap: 1rem; text-align: left; span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
+    .categorySelectPanel { margin-top: .5rem; padding: 1rem; border: 1px solid rgba($border-color,.2); border-radius: 8px; background: #faf9f4; }
+    input[type='search'] { display: block; width: 100%; min-height: 44px; margin: .5rem 0; padding: .6rem; border: 1px solid rgba($border-color,.2); border-radius: 5px; font: inherit; }
+    .categorySelectOptions { max-height: 220px; overflow-y: auto; overscroll-behavior: contain; margin-bottom: .75rem; label { display: flex; align-items: center; gap: .75rem; min-height: 44px; } input { accent-color: $border-color; } }
+}

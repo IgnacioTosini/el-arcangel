@@ -1,0 +1,21 @@
+@use '@/styles/variables' as *;
+
+.adminRecordActions { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem; flex-shrink: 0; }
+.deleteRecordTrigger, .deleteRecordConfirm {
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    min-height: 44px; padding: .625rem 1rem; border-radius: 6px;
+    font: inherit; font-size: $font-size-normal; cursor: pointer;
+    &:focus-visible { outline: 2px solid #a52b2b; outline-offset: 3px; }
+    &:disabled { opacity: .6; cursor: wait; }
+}
+.deleteRecordTrigger { border: 1px solid rgba(#a52b2b,.22); background: transparent; color: #972828; &:hover { background: rgba(#a52b2b,.07); border-color: #a52b2b; } }
+.deleteRecordConfirm { border: 1px solid #a52b2b; background: #a52b2b; color: #fff; &:hover:not(:disabled) { background: #882121; } }
+.deleteRecordConfirmation {
+    font-size: $font-size-normal; line-height: 1.6;
+    > p { margin: 0 0 1rem; }
+    .deleteRecordName { padding: .875rem 1rem; border: 1px solid rgba($border-color,.12); border-radius: 8px; background: #faf9f4; color: $color-text-secondary; font-weight: 600; overflow-wrap: anywhere; }
+    .deleteRecordError { padding: .75rem; border-radius: 6px; color: #972828; background: rgba(#a52b2b,.07); }
+    .deleteRecordActions { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba($border-color,.15); }
+    button:disabled { opacity: .6; cursor: wait; }
+    @media (max-width: 480px) { .deleteRecordActions { flex-direction: column; button { width: 100%; } } }
+}
