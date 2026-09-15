@@ -23,7 +23,9 @@ El acceso al panel es `/login`, usando `ADMIN_PASSWORD`. Los productos se cargan
 
 ## Despliegue
 
-Configurá en Vercel las variables de `.env.example`, usando una base PostgreSQL accesible desde el despliegue (no `localhost`). Aplicá `npx prisma migrate deploy` a esa base antes de publicar. La instalación genera el cliente Prisma, pero no modifica la base automáticamente. Las credenciales de Cloudinary son del servidor.
+Configurá en Vercel las variables de `.env.example`, usando la conexión de Neon como `DATABASE_URL` (no `localhost`). La instalación genera el cliente Prisma. `vercel.json` configura `npm run vercel-build`, que aplica las migraciones pendientes con `prisma migrate deploy` antes de compilar. Si la migración falla, el despliegue se detiene. Las credenciales de Cloudinary son del servidor.
+
+Las migraciones crean las tablas, pero no copian los productos de la base local. Si usás despliegues Preview, asignales una base o rama de Neon separada de Production.
 
 La consulta no reserva stock. Al completar una venta, el servidor valida y descuenta las existencias en una transacción; requiere stock definido y suficiente. Una venta completada no puede cambiar de estado.
 
