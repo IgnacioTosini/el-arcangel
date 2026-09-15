@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import ProductSearch from '@/components/ui/productSearch/ProductSearch';
 import { useRef, useState } from 'react';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
 import './_navbar.scss';
@@ -37,15 +38,7 @@ export default function Navbar({ consultationCount }: NavbarProps) {
                         <Link href="/mayoristas" className="navbarLink" onClick={closeMenu}>Mayoristas</Link>
                         <Link href="/contacto" className="navbarLink" onClick={closeMenu}>El local</Link>
                     </nav>
-                    <form className="navbarSearch" action="/catalogo" method="get" role="search" onSubmit={closeMenu}>
-                        <input
-                            className="navbarSearchInput"
-                            type="search"
-                            name="q"
-                            aria-label="Buscar por nombre o código"
-                            placeholder="Buscar por nombre o código…"
-                        />
-                    </form>
+                    <div className="navbarSearch"><ProductSearch onNavigate={closeMenu} /></div>
                 </div>
 
                 <Link href="/mi-consulta" className="navbarConsultation" onClick={closeMenu}>

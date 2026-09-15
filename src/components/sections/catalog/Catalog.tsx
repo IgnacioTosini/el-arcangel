@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import ProductCard, { type ProductCardData } from '@/components/cards/productCard/ProductCard';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
+import ProductSearch from '@/components/ui/productSearch/ProductSearch';
 import Modal from '@/components/ui/modal/Modal';
 import type { CatalogProduct } from '@/data/products';
 import CatalogFilters from './catalogFilters/CatalogFilters';
@@ -44,6 +45,7 @@ export default function Catalog({ products: catalogProducts, categories }: { pro
                 <h1>Catálogo</h1>
                 <p role="status">{products.length} {products.length === 1 ? 'producto' : 'productos'}{query ? ` para “${query}”` : ''}.</p>
             </header>
+            <ProductSearch live preserveFilters />
             <div className="catalogDesktopFilters"><CatalogFilters categories={categories} value={filters} onChange={updateFilters} /></div>
             <button className="catalogMobileFilters catalogButton" type="button" aria-haspopup="dialog" onClick={() => setDraft(filters)}>
                 Filtrar y ordenar{filters.category || filters.sort !== 'newest' ? ' · Activos' : ''}
