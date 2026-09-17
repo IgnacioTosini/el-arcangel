@@ -17,7 +17,7 @@ test('En desarrollo conserva la imagen del icono sin inventar una URL canónica'
     const { pageMetadata } = await import('@/lib/seo');
     const result = pageMetadata('Inicio', 'Descripción', '/');
     expect(result.alternates).toBeUndefined();
-    expect(result.openGraph?.images).toEqual([{ url: '/brand/arcangel-icon-original.png', alt: 'Inicio' }]);
+    expect(result.openGraph?.images).toEqual([{ url: '/brand/arcangel-social.jpg', alt: 'Inicio', width: 1200, height: 630, type: 'image/jpeg' }]);
 });
 
 test('En Vercel utiliza el dominio público aunque SITE_URL todavía no esté definido', async () => {
@@ -26,6 +26,6 @@ test('En Vercel utiliza el dominio público aunque SITE_URL todavía no esté de
     vi.resetModules();
     const { pageMetadata } = await import('@/lib/seo');
     const result = pageMetadata('Inicio', 'Descripción', '/');
-    expect(result.openGraph?.images).toEqual([{ url: 'https://arcangel-test.vercel.app/brand/arcangel-icon-original.png', alt: 'Inicio' }]);
-    expect(result.twitter?.images).toEqual(['https://arcangel-test.vercel.app/brand/arcangel-icon-original.png']);
+    expect(result.openGraph?.images).toEqual([{ url: 'https://arcangel-test.vercel.app/brand/arcangel-social.jpg', alt: 'Inicio', width: 1200, height: 630, type: 'image/jpeg' }]);
+    expect(result.twitter?.images).toEqual(['https://arcangel-test.vercel.app/brand/arcangel-social.jpg']);
 });
