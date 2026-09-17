@@ -40,7 +40,7 @@ async function deleteImage(req: NextRequest) {
     const prefix = `${(process.env.CLOUDINARY_UPLOAD_FOLDER ?? 'demo-store').replace(/\/+$/, '')}/`;
     if (!publicId.startsWith(prefix) || publicId.split('/').some(part => part === '..' || part === '.')) return Response.json({ success: false, error: 'La imagen no pertenece a esta tienda.' }, { status: 400 });
 
-    const references = await Promise.all([prisma.productImage.count({ where: { publicId } }), prisma.category.count({ where: { publicId } })]);
+    const references = await Promise.all([prisma.productImage.count({ where: { publicId } }), prisma.category.count({ where: { publicId } }), prisma.siteSettings.count({ where: { homeContent: { path: ['heroImagePublicId'], equals: publicId } } })]);
     if (references.some(Boolean)) return Response.json({ success: false, error: 'La imagen todavía está asociada a un registro.' }, { status: 409 });
 
     const timestamp = Math.floor(Date.now() / 1000);

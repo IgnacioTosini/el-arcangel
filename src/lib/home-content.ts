@@ -1,4 +1,8 @@
 export const defaultHomeContent = {
+    footerDescription: 'Santería y regalería. Venta por mayor y menor.',
+    heroImageUrl: '/brand/local-ilustrativo.webp',
+    heroImagePublicId: '',
+    heroImageAlt: 'Representación ilustrativa de una santería y regalería El Arcángel',
     heroTitle: 'Encontrá ese detalle especial',
     heroSubtitle: 'Santería y regalería. Venta por mayor y menor.',
     heroCatalogButton: 'Explorar catálogo',
@@ -30,6 +34,14 @@ export function validateHomeContent(value: unknown): HomeContent {
     const result = { ...defaultHomeContent };
     for (const key of Object.keys(result) as (keyof HomeContent)[]) {
         const text = (value as Record<string, unknown>)[key];
+        if (key === 'heroImageUrl' || key === 'heroImagePublicId' || key === 'heroImageAlt') {
+            if (text === undefined) continue;
+            if (typeof text !== 'string' || text.length > 2000) throw new Error('Imagen inválida');
+            if (key === 'heroImageUrl' && text !== defaultHomeContent.heroImageUrl && !text.startsWith('https://res.cloudinary.com/')) throw new Error('Imagen inválida');
+            if (key === 'heroImageAlt' && !text.trim()) throw new Error('Completá la descripción de la imagen');
+            result[key] = text.trim();
+            continue;
+        }
         const limit = key.endsWith('Description') ? 2000 : key.endsWith('Button') ? 80 : 200;
         if (typeof text !== 'string' || !text.trim() || text.trim().length > limit) throw new Error('Revisá los textos del inicio: no pueden quedar vacíos ni superar el largo permitido.');
         result[key] = text.trim();

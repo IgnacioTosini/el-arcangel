@@ -8,7 +8,7 @@ import './_storeSettings.scss';
 export default function StoreSettings() {
     const { settings, updateSettings } = useSiteSettings();
     const { revision } = useAdmin();
-    return <section className="storeSettingsContent"><h2>Datos del local</h2><p className="adminMuted">Los campos vacíos están pendientes de confirmar. Todos los cambios se aplican al presionar Guardar cambios. Un WhatsApp válido habilita el botón en Mi consulta.</p>
+    return <section className="storeSettingsContent"><h2>Datos del local</h2><p className="adminMuted">Estos datos se muestran en el footer y en El local. Los campos vacíos no se muestran en el footer. Todos los cambios se aplican al presionar Guardar cambios. Un WhatsApp válido habilita el botón en Mi consulta.</p>
         <div className="storeSettingsForm"><InlineFields saveTogether key={revision} record={{ id:'store', ...Object.fromEntries(Object.entries(settings).filter(([key]) => key !== 'homeContent')) }} fields={[
             { name:'name',label:'Nombre del comercio' },{ name:'whatsapp',label:'WhatsApp (con código de país, sin +)',optional:true,placeholder:'Ej: 5491155551234' },
             { name:'instagram',label:'Instagram',optional:true },{ name:'address',label:'Dirección',optional:true,placeholder:'Sin confirmar' },{ name:'hours',label:'Horarios de atención',optional:true,full:true,placeholder:'Sin confirmar' },

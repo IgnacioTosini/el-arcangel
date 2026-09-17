@@ -17,3 +17,9 @@ Created using the built-in image generation tool, then resized using Sharp. Orig
 Generation prompt:
 
 Create a single square favicon icon for El Arcángel, inspired by the attached Instagram profile image depicting Saint Michael the Archangel with gold armor and broad wings. Simplify into a bold elegant flat emblem: frontal gold winged archangel upper body, simple cream circular halo, two symmetric broad gold wings, simple central gold shield/armor silhouette, deep forest green #2b493c solid square background with subtly rounded corners. Very few large shapes, thick clear silhouettes, maximum legibility at 32x32 pixels. No text, no lettering, no tiny facial detail, no gradients, no photographs, no mockups, no multiple variants, no borders. Center emblem filling 80 percent of square with generous consistent margins. Produce a polished 1024x1024 icon asset.
+
+## Home illustration
+
+`local-ilustrativo.webp`: 1440 x 960, generated using the built-in image tool and compressed with Sharp. Imagined shop interior, not a photograph of the actual premises. The admin can replace it with a real photo.
+
+Prompt: Create a photorealistic editorial illustration of an imagined small Argentinian santeria and gift shop named El Arcangel for the website hero. Landscape 3:2, cream plaster walls, forest green shelves, oak counter, incense, religious angel statues, decorative Buddha figures, candles and kraft gift boxes. Warm natural afternoon light, welcoming neighborhood shop, no people, a tasteful sign reading El Arcangel. No other legible text or watermark.

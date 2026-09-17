@@ -15,7 +15,7 @@ export default function Hero({ content = defaultHomeContent }: { content?: HomeC
                 </div>
             </div>
             <picture className='heroPicture'>
-                <Image src="/heroImage.jpg" alt="Sahumerios encendidos, una figura decorativa y lavanda sobre una mesa" className="heroImage" width={600} height={400} sizes="(max-width: 768px) calc(100vw - 32px), (max-width: 1280px) 48vw, 596px" priority />
+                <Image src={content.heroImageUrl} alt={content.heroImageAlt} className="heroImage" width={600} height={400} sizes="(max-width: 768px) calc(100vw - 32px), (max-width: 1280px) 48vw, 596px" priority />
             </picture>
         </section>
     )
