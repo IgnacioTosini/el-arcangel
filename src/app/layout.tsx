@@ -6,6 +6,7 @@ import ConsultationProvider from "@/components/providers/ConsultationProvider";
 import SiteSettingsProvider from "@/components/providers/SiteSettingsProvider";
 import "./globals.scss";
 import { ToastProvider } from '@/components/providers/ToastProvider';
+import { getWholesaleAccount } from '@/lib/wholesale-auth';
 
 const karla = Karla({
   variable: "--font-karla",
@@ -25,13 +26,14 @@ export const metadata: Metadata = {
   applicationName: 'El Arcángel',
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const account = await getWholesaleAccount();
   return (
     <html lang="es" className={`${karla.variable} ${cormorantGaramond.variable}`}>
       <body>
         <ToastProvider />
-        <ConsultationProvider>
-          <SiteSettingsProvider><SiteFrame>{children}</SiteFrame></SiteSettingsProvider>
+        <ConsultationProvider accountId={account?.status === 'APPROVED' ? account.id : undefined}>
+          <SiteSettingsProvider><SiteFrame hasWholesaleSession={Boolean(account)}>{children}</SiteFrame></SiteSettingsProvider>
         </ConsultationProvider>
       </body>
     </html>

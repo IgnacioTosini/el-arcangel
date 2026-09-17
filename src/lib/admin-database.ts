@@ -9,7 +9,7 @@ export async function readAdminData(): Promise<AdminData> {
         prisma.category.findMany({ orderBy: { sortOrder: 'asc' } }), prisma.product.findMany({ include: { categories: { select: { id: true } } } }),
         prisma.productVariant.findMany(), prisma.productImage.findMany({ orderBy: { sortOrder: 'asc' } }), prisma.order.findMany({ orderBy: { createdAt: 'desc' } }), prisma.orderItem.findMany(),
     ]);
-    const ProductVariant = variants.map(row => ({ ...row, price: row.price?.toNumber() ?? null, compareAtPrice: row.compareAtPrice?.toNumber() ?? null }));
+    const ProductVariant = variants.map(row => ({ ...row, price: row.price?.toNumber() ?? null, compareAtPrice: row.compareAtPrice?.toNumber() ?? null, wholesalePrice: row.wholesalePrice?.toNumber() ?? null, wholesaleCompareAtPrice: row.wholesaleCompareAtPrice?.toNumber() ?? null }));
     const Order = orders.map(row => ({ ...row, estimatedTotal: row.estimatedTotal?.toNumber() ?? null, finalTotal: row.finalTotal?.toNumber() ?? null }));
     const OrderItem = items.map(row => ({ ...row, unitPrice: row.unitPrice?.toNumber() ?? null }));
     const Product = products.map(({ categories, ...product }) => ({ ...product, categoryIds: categories.map(category => category.id).join(',') }));

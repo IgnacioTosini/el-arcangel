@@ -8,9 +8,10 @@ import './_navbar.scss';
 
 type NavbarProps = {
     consultationCount?: number;
+    hasWholesaleSession?: boolean;
 };
 
-export default function Navbar({ consultationCount }: NavbarProps) {
+export default function Navbar({ consultationCount, hasWholesaleSession = false }: NavbarProps) {
     const { count } = useConsultation();
     const itemCount = consultationCount ?? count;
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar({ consultationCount }: NavbarProps) {
         }}>
             <div className="navbarInner">
                 <Link href="/" className="navbarBrand" onClick={closeMenu} aria-label="El Arcángel, inicio">
-                    EL ARCÁNGEL
+                    <span>EL</span>{' '}<span>ARCÁNGEL</span>
                 </Link>
 
                 <div id="navbarMenu" className={`navbarMenu${isMenuOpen ? ' navbarMenuOpen' : ''}`}>
@@ -41,6 +42,10 @@ export default function Navbar({ consultationCount }: NavbarProps) {
                     <div className="navbarSearch"><ProductSearch onNavigate={closeMenu} /></div>
                 </div>
 
+                <Link href="/mayoristas/cuenta" className="navbarAccount" onClick={closeMenu} aria-label={hasWholesaleSession ? 'Mi cuenta mayorista' : 'Acceso mayorista'} title={hasWholesaleSession ? 'Mi cuenta mayorista' : 'Acceso mayorista'}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg>
+                    <span>{hasWholesaleSession ? 'Mi cuenta' : 'Acceso mayorista'}</span>
+                </Link>
                 <Link href="/mi-consulta" className="navbarConsultation" onClick={closeMenu}>
                     <span>Mi consulta</span>
                     <span className="navbarCount" aria-label={`${itemCount} artículos`}>

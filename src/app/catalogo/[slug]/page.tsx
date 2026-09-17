@@ -1,3 +1,4 @@
+import { readCustomerCatalog } from '@/lib/customer-catalog';
 import type { Metadata } from 'next';
 import { cache } from 'react';
 import { pageMetadata } from '@/lib/seo';
@@ -20,7 +21,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-    const product = await findProduct((await params).slug);
+    const { products, purchaseType } = await readCustomerCatalog();
+    const { slug } = await params;
+    const product = products.find(item => item.href === `/catalogo/${slug}`);
     if (!product) notFound();
-    return <main><ProductDetail key={product.id} product={product} /></main>;
+    return <main><ProductDetail key={product.id} product={product} purchaseType={purchaseType} /></main>;
 }

@@ -1,16 +1,17 @@
+import { defaultHomeContent, type HomeContent } from '@/lib/home-content';
 import Image from 'next/image';
 import Link from 'next/link';
 import './_hero.scss';
 
-export default function Hero() {
+export default function Hero({ content = defaultHomeContent }: { content?: HomeContent }) {
     return (
         <section className="heroContent" aria-labelledby="heroTitle">
             <div className='heroInner'>
-                <h1 id="heroTitle" className='heroTitle'>Encontrá ese detalle especial</h1>
-                <p className='heroSubtitle'>Santería y regalería. Venta por mayor y menor.</p>
+                <h1 id="heroTitle" className='heroTitle'>{content.heroTitle}</h1>
+                <p className='heroSubtitle'>{content.heroSubtitle}</p>
                 <div className='heroButtons'>
-                    <Link href="/catalogo" className='heroButton'>Explorar catálogo</Link>
-                    <Link href="/mayoristas" className='heroButton heroButtonSecondary'>Consultar por mayor</Link>
+                    <Link href="/catalogo" className='heroButton'>{content.heroCatalogButton}</Link>
+                    <Link href="/mayoristas" className='heroButton heroButtonSecondary'>{content.heroWholesaleButton}</Link>
                 </div>
             </div>
             <picture className='heroPicture'>

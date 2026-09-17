@@ -1,11 +1,13 @@
 import { prisma } from './prisma';
 import type { CatalogProduct } from '@/data/products';
-export async function readCatalog() {
+export async function readCatalog(purchaseType: 'RETAIL' | 'WHOLESALE' = 'RETAIL') {
     const [rows, categories] = await Promise.all([
         prisma.product.findMany({ where: { active: true }, include: { categories: { where: { active: true } }, images: { orderBy: { sortOrder: 'asc' } }, variants: { where: { active: true }, orderBy: { sortOrder: 'asc' } } }, orderBy: { createdAt: 'desc' } }),
         prisma.category.findMany({ where: { active: true }, orderBy: { sortOrder: 'asc' } }),
     ]);
     const products: CatalogProduct[] = rows.map(row => {
+        // Only serialize the authorized price tier; never send both tiers to the browser.
+        row.variants = row.variants.map(v => ({ ...v, price: purchaseType === 'WHOLESALE' ? v.wholesalePrice : v.price, compareAtPrice: purchaseType === 'WHOLESALE' ? v.wholesaleCompareAtPrice : v.compareAtPrice }));
         const available = row.variants.filter(v => v.stock !== 0);
         const candidates = available.length ? available : row.variants;
         const priced = candidates.filter(v => v.price !== null).sort((a, b) => a.price!.comparedTo(b.price!));

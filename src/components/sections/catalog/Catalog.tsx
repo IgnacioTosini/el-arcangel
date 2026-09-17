@@ -11,7 +11,7 @@ import CatalogFilters from './catalogFilters/CatalogFilters';
 import { filterProducts, parseFilters, type CatalogFiltersValue } from './catalogFilters/filterUtils';
 import './_catalog.scss';
 
-export default function Catalog({ products: catalogProducts, categories }: { products: CatalogProduct[]; categories: { value: string; label: string }[] }) {
+export default function Catalog({ products: catalogProducts, categories, purchaseType = 'RETAIL' }: { products: CatalogProduct[]; categories: { value: string; label: string }[]; purchaseType?: 'RETAIL' | 'WHOLESALE' }) {
     const params = useSearchParams();
     const router = useRouter();
     const pathname = usePathname();
@@ -43,6 +43,7 @@ export default function Catalog({ products: catalogProducts, categories }: { pro
         <div className="catalogContent">
             <header className="catalogHeader">
                 <h1>Catálogo</h1>
+                <p>{purchaseType === 'WHOLESALE' ? 'Precios mayoristas · cuenta aprobada' : 'Precios minoristas'}</p>
                 <p role="status">{products.length} {products.length === 1 ? 'producto' : 'productos'}{query ? ` para “${query}”` : ''}.</p>
             </header>
             <ProductSearch live preserveFilters />

@@ -1,5 +1,6 @@
 ﻿'use client';
 
+import { defaultHomeContent } from '@/lib/home-content';
 import Link from 'next/link';
 import ProductCard, { type ProductCardData } from '@/components/cards/productCard/ProductCard';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
@@ -8,7 +9,7 @@ import './_featured.scss';
 
 
 
-export default function Featured({ products: featuredProducts }: { products: ProductCardData[] }) {
+export default function Featured({ products: featuredProducts, purchaseType = 'RETAIL', title = defaultHomeContent.featuredTitle, buttonLabel = defaultHomeContent.featuredButton }: { products: ProductCardData[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; title?: string; buttonLabel?: string }) {
     const { addItem } = useConsultation();
 
     function handleAdd(product: ProductCardData) {
@@ -18,9 +19,10 @@ export default function Featured({ products: featuredProducts }: { products: Pro
     return (
         <section className="featuredContent" aria-labelledby="featuredTitle">
             <div className="featuredHeader">
-                <h2 id="featuredTitle" className="featuredTitle">Selección destacada</h2>
-                <Link href="/catalogo" className="featuredLink">Ver todo <span aria-hidden="true">→</span></Link>
+                <h2 id="featuredTitle" className="featuredTitle">{title}</h2>
+                <Link href="/catalogo" className="featuredLink">{buttonLabel} <span aria-hidden="true">→</span></Link>
             </div>
+            <p className='featuredDescription'>{purchaseType === 'WHOLESALE' ? 'Precios mayoristas · cuenta aprobada' : 'Precios minoristas'}</p>
             <ul className="featuredGrid">
                 {featuredProducts.map((product) => (
                     <li key={product.id} className="featuredItem">

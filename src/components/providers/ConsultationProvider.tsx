@@ -14,8 +14,6 @@ export type ConsultationItem = {
 type ConsultationContextValue = {
     items: ConsultationItem[];
     count: number;
-    purchaseType: 'RETAIL' | 'WHOLESALE';
-    setPurchaseType: (value: 'RETAIL' | 'WHOLESALE') => void;
     updateQuantity: (id: string, quantity: number, stock?: number | null) => void;
     removeItem: (id: string) => void;
     clearItems: () => void;
@@ -23,11 +21,14 @@ type ConsultationContextValue = {
 };
 
 const ConsultationContext = createContext<ConsultationContextValue | null>(null);
-const storageKey = 'el-arcangel:consultation:v1';
+export default function ConsultationProvider({ children, accountId }: { children: ReactNode; accountId?: string }) {
+    // Keep the existing visitor list; each approved account gets its own browser storage.
+    const storageKey = accountId ? `el-arcangel:consultation:wholesale:${accountId}` : 'el-arcangel:consultation:v1';
+    return <ScopedConsultationProvider key={storageKey} storageKey={storageKey}>{children}</ScopedConsultationProvider>;
+}
 
-export default function ConsultationProvider({ children }: { children: ReactNode }) {
+function ScopedConsultationProvider({ children, storageKey }: { children: ReactNode; storageKey: string }) {
     const [items, setItems] = useState<ConsultationItem[]>([]);
-    const [purchaseType, setPurchaseType] = useState<'RETAIL' | 'WHOLESALE'>('RETAIL');
     const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
@@ -41,16 +42,15 @@ export default function ConsultationProvider({ children }: { children: ReactNode
             // Restore browser-only storage after hydration.
             // eslint-disable-next-line react-hooks/set-state-in-effect
             setItems([...restored.values()]);
-            setPurchaseType(saved?.purchaseType === 'WHOLESALE' ? 'WHOLESALE' : 'RETAIL');
         } catch { /* Storage may be unavailable or contain invalid JSON. */ }
         setLoaded(true);
-    }, []);
+    }, [storageKey]);
 
     useEffect(() => {
         if (!loaded) return;
-        try { localStorage.setItem(storageKey, JSON.stringify({ items, purchaseType })); }
+        try { localStorage.setItem(storageKey, JSON.stringify({ items })); }
         catch { /* Keep the consultation usable when browser storage is unavailable. */ }
-    }, [items, purchaseType, loaded]);
+    }, [items, loaded, storageKey]);
 
     function clearItems() {
         try { localStorage.removeItem(storageKey); } catch { /* Storage is optional. */ }
@@ -74,7 +74,7 @@ export default function ConsultationProvider({ children }: { children: ReactNode
     }
 
     return (
-        <ConsultationContext.Provider value={{ items, count: items.reduce((total, item) => total + item.quantity, 0), addItem, purchaseType, setPurchaseType, updateQuantity, removeItem: (id) => setItems((current) => current.filter((item) => item.id !== id)), clearItems }}>
+        <ConsultationContext.Provider value={{ items, count: items.reduce((total, item) => total + item.quantity, 0), addItem, updateQuantity, removeItem: (id) => setItems((current) => current.filter((item) => item.id !== id)), clearItems }}>
             {children}
         </ConsultationContext.Provider>
     );

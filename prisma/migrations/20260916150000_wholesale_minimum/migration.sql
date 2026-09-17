@@ -1,0 +1,1 @@
+ALTER TABLE "SiteSettings" ADD COLUMN "wholesaleMinimum" DECIMAL(12,2) NOT NULL DEFAULT 0;

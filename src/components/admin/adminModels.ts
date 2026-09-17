@@ -220,6 +220,8 @@ export const adminModels: AdminModel[] = [
         "unique": false,
         "readonly": false
       },
+      { "name": "wholesalePrice", "type": "Decimal", "required": false, "unique": false, "readonly": false },
+      { "name": "wholesaleCompareAtPrice", "type": "Decimal", "required": false, "unique": false, "readonly": false },
       {
         "name": "stock",
         "type": "Int",

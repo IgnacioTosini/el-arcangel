@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { ImageService, type UploadedImage } from '@/services/ImageService';
 import type { ImageUploadFolder } from '@/lib/image-upload-folders';
 import { IMAGE_MIME_TYPES } from '@/lib/image-upload-validation';
-import '../imageUpload/_imageUpload.scss';
+import './_draftImage.scss';
 
 export default function DraftImage({ url, folder, onChange, onBusy }: {
     url?: string | null; folder: ImageUploadFolder; onChange: (image: UploadedImage | null) => void; onBusy: (busy: boolean) => void;

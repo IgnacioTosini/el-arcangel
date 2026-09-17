@@ -108,8 +108,10 @@ export default function CatalogForm({ model, initial, onClose }: Props) {
                     <DraftFields record={variant} onChange={(name, value) => setVariants(current => current.map(item => item.id === variant.id ? { ...item, [name]: value } : item))} fields={[
                         { name: 'name', label: 'Nombre de la variante', placeholder: 'Ej.: Dorado · 25 cm' }, { name: 'sku', label: 'Código (SKU)', optional: true, placeholder: 'Automático al guardar' },
                         { name: 'stock', label: 'Stock (vacío = a confirmar)', type: 'number', optional: true },
-                        { name: 'price', label: 'Precio actual ($)', type: 'number', step: '.01', optional: true },
-                        { name: 'compareAtPrice', label: 'Precio anterior ($)', type: 'number', step: '.01', optional: true },
+                        { name: 'price', label: 'Precio minorista actual ($)', type: 'number', step: '.01', optional: true },
+                        { name: 'compareAtPrice', label: 'Precio minorista anterior ($)', type: 'number', step: '.01', optional: true },
+                        { name: 'wholesalePrice', label: 'Precio mayorista actual ($)', type: 'number', step: '.01', optional: true },
+                        { name: 'wholesaleCompareAtPrice', label: 'Precio mayorista anterior ($)', type: 'number', step: '.01', optional: true },
                         { name: 'active', label: 'Variante a la venta', type: 'checkbox' },
                     ]} />
                     <p className="adminMuted">Podés escribir un SKU propio. Si lo dejás vacío, se genera al guardar; si la variante ya tiene uno, se conserva.</p>

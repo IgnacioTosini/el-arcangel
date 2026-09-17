@@ -10,18 +10,25 @@ import MessagePreview from './messagePreview/MessagePreview';
 import { buildMessage, formatAmount, getEstimate, type CustomerDetails } from './consultationUtils';
 import './_consultation.scss';
 
-export default function Consultation({ products: catalogProducts }: { products: CatalogProduct[] }) {
-    const { items, purchaseType, setPurchaseType, updateQuantity, removeItem, clearItems } = useConsultation();
+export default function Consultation({ products: catalogProducts, purchaseType = 'RETAIL', account, wholesaleMinimum = 0, wholesaleMinimumUnits = 2 }: { products: CatalogProduct[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; account?: { name: string; business: string } | null; wholesaleMinimum?: number; wholesaleMinimumUnits?: number }) {
+    const { items, updateQuantity, removeItem, clearItems } = useConsultation();
     const submission = useRef({ fingerprint: '', key: '' });
-    const [customer, setCustomer] = useState<CustomerDetails>({ name: '', phone: '', business: '', comment: '' });
+    const [customer, setCustomer] = useState<CustomerDetails>({ name: account?.name ?? '', phone: '', business: account?.business ?? '', comment: '' });
     const lines = items.flatMap((item) => {
         const product = catalogProducts.find(product => product.variants?.some(v => v.id === item.id));
         const variant = product?.variants?.find(v => v.id === item.id);
         return product && variant ? [{ product: { ...product, id: variant.id, variantId: variant.id, stock: variant.stock, name: `${product.name} | ${variant.name}`, sku: variant.sku, price: variant.price, priceFrom: false }, quantity: item.quantity }] : [];
     });
+    const unavailableItems = items.filter(item => !lines.some(line => line.product.variantId === item.id));
+    const insufficientStock = lines.some(line => line.product.stock != null && line.quantity > line.product.stock);
     const estimate = getEstimate(lines);
+    const remaining = Math.max(0, Math.round((wholesaleMinimum - estimate.amount) * 100) / 100);
+    const units = lines.reduce((sum, line) => sum + line.quantity, 0);
+    const missingUnits = Math.max(0, wholesaleMinimumUnits - units);
+    const minimumBlocked = purchaseType === 'WHOLESALE' && (remaining > 0 || missingUnits > 0);
     const message = buildMessage(lines, purchaseType, customer);
     async function submitInquiry() {
+        if (unavailableItems.length || insufficientStock || minimumBlocked) throw new Error('Revisá los artículos y las cantidades de tu consulta antes de enviarla.');
         const payload = { customer, purchaseType, items: lines.map(line => ({ variantId: line.product.variantId, quantity: line.quantity })) };
         const fingerprint = JSON.stringify(payload);
         if (submission.current.fingerprint !== fingerprint) submission.current = { fingerprint, key: crypto.randomUUID() };
@@ -36,23 +43,36 @@ export default function Consultation({ products: catalogProducts }: { products: 
                 <h1>Mi consulta</h1>
                 <p>Esta lista no es una compra: la enviás y te respondemos con precios finales y disponibilidad.</p>
             </header>
-            <fieldset className="consultationMode">
-                <legend>Tipo de compra</legend>
-                {(['RETAIL', 'WHOLESALE'] as const).map((type) => (
-                    <label key={type}><input type="radio" name="purchaseType" checked={purchaseType === type} onChange={() => setPurchaseType(type)} /><span>{type === 'RETAIL' ? 'Por menor' : 'Por mayor'}</span></label>
-                ))}
-            </fieldset>
-            {lines.length ? <>
+            <div className="consultationAccountBar">
+                <p>{purchaseType === 'WHOLESALE' ? 'Consulta mayorista · precios de tu cuenta aprobada' : 'Consulta minorista'}</p>
+                <Link href="/mayoristas/cuenta" className="consultationButton consultationAccountLink">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg>
+                    {purchaseType === 'WHOLESALE' ? 'Mi cuenta mayorista' : 'Acceso mayorista'}
+                    <span aria-hidden="true">→</span>
+                </Link>
+            </div>
+            {items.length ? <>
                 <ul className="consultationItems">
                     {lines.map((line) => <li key={line.product.id}><ConsultationItem {...line} onQuantityChange={(quantity) => updateQuantity(line.product.id, quantity, line.product.stock)} onRemove={() => removeItem(line.product.id)} /></li>)}
                 </ul>
+                {unavailableItems.length > 0 && <section className="consultationUnavailable" aria-label="Artículos guardados para revisar">
+                    <h2>Artículos para revisar</h2>
+                    <p>Estos artículos siguen en tu lista, pero su variante ya no aparece en el catálogo actual. Buscalos en el catálogo para volver a elegirlos o quitalos antes de enviar la consulta.</p>
+                    <ul>{unavailableItems.map(item => <li key={item.id}>
+                        <div><h3>{item.name}</h3><p>Cantidad guardada: {item.quantity} · Variante no disponible</p></div>
+                        <button type="button" className="consultationButton" onClick={() => removeItem(item.id)} aria-label={`Quitar ${item.name}`}>Quitar</button>
+                    </li>)}</ul>
+                    <Link href="/catalogo" className="consultationButton">Revisar catálogo</Link>
+                </section>}
                 <div className="consultationSummary">
-                    <p aria-live="polite">{estimate.incomplete ? 'Subtotal de artículos con precio (faltan importes por confirmar): ' : 'Estimado (precios a confirmar): '}<strong>{formatAmount(estimate.amount)}</strong></p>
+                    <p aria-live="polite">{unavailableItems.length ? 'Subtotal del catálogo actual (excluye artículos para revisar): ' : estimate.incomplete ? 'Subtotal de artículos con precio (faltan importes por confirmar): ' : 'Estimado (precios a confirmar): '}<strong>{formatAmount(estimate.amount)}</strong></p>
                     <button type="button" onClick={clearItems}>Vaciar consulta</button>
                 </div>
+                    {purchaseType === 'WHOLESALE' && wholesaleMinimum > 0 && <p role="status" className='consultationWarning'>Mínimo mayorista: <strong>{formatAmount(wholesaleMinimum)}</strong>. {remaining > 0 ? `Te faltan ${formatAmount(remaining)} para enviar tu consulta.` : 'Tu pedido alcanza el mínimo.'} {estimate.incomplete && 'Los artículos sin precio no suman para alcanzar el mínimo.'}</p>}
+                {purchaseType === 'WHOLESALE' && <p role="status" className="consultationWarning">Mínimo mayorista: <strong>{wholesaleMinimumUnits} unidades</strong> en total. {missingUnits > 0 ? `Te ${missingUnits === 1 ? 'falta 1 unidad' : `faltan ${missingUnits} unidades`} para enviar tu consulta.` : 'Tu pedido alcanza la cantidad mínima.'}</p>}
                 <div className="consultationColumns">
                     <CustomerForm value={customer} wholesale={purchaseType === 'WHOLESALE'} onChange={setCustomer} />
-                    <MessagePreview message={message} onSubmit={submitInquiry} />
+                    <MessagePreview message={message} onSubmit={submitInquiry} blocked={minimumBlocked || insufficientStock || unavailableItems.length > 0} />
                 </div>
             </> : <section className="consultationEmpty">
                 <h2>Tu consulta está vacía</h2>

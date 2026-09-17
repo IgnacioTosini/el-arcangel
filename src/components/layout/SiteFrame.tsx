@@ -5,8 +5,8 @@ import type { ReactNode } from 'react';
 import Navbar from './navbar/Navbar';
 import Footer from './footer/Footer';
 
-export default function SiteFrame({ children }: { children: ReactNode }) {
+export default function SiteFrame({ children, hasWholesaleSession = false }: { children: ReactNode; hasWholesaleSession?: boolean }) {
     const pathname = usePathname();
     if (pathname === '/login' || pathname === '/admin' || pathname.startsWith('/admin/')) return <>{children}</>;
-    return <><Navbar />{children}<Footer /></>;
+    return <><Navbar hasWholesaleSession={hasWholesaleSession} />{children}<Footer /></>;
 }

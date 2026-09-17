@@ -11,7 +11,7 @@ import { openWhatsApp } from '@/lib/open-whatsapp';
 
 vi.mock('@/components/ui/consultationToast/ConsultationToast', () => ({ notifyConsultationAdded: vi.fn() }));
 vi.mock('@/components/providers/SiteSettingsProvider', () => ({ useSiteSettings: () => ({ settings: { whatsapp: '5491112345678', instagram: '' } }) }));
-vi.mock('@/lib/open-whatsapp', () => ({ openWhatsApp: vi.fn() }));
+vi.mock('@/lib/open-whatsapp', () => ({ openWhatsApp: vi.fn(async (_phone, _message, beforeOpen) => beforeOpen()) }));
 
 afterEach(() => { cleanup(); localStorage.clear(); });
 
@@ -26,6 +26,20 @@ const product: CatalogProduct = {
     ],
 };
 
+test('El mínimo de unidades se exige aunque no haya importe mínimo', async () => {
+    localStorage.setItem('el-arcangel:consultation:v1', JSON.stringify({ items: [{ id: 'variant-1', name: product.name, quantity: 1 }] }));
+    const user = userEvent.setup();
+    render(<ConsultationProvider><Consultation products={[product]} purchaseType="WHOLESALE" wholesaleMinimumUnits={3} /></ConsultationProvider>);
+    const button = await screen.findByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    expect(screen.getByText(/Te faltan 2 unidades/)).toBeTruthy();
+    const quantity = screen.getByRole('spinbutton', { name: 'Cantidad de Set sahumerios | Natural' });
+    await user.clear(quantity);
+    await user.type(quantity, '3');
+    await user.tab();
+    expect(button.disabled).toBe(false);
+});
+
 function setup() {
     render(<ConsultationProvider>
         <Featured products={[product]} />
@@ -34,6 +48,59 @@ function setup() {
     </ConsultationProvider>);
     return userEvent.setup();
 }
+
+test('Una lista recuperada con stock reducido bloquea el envío hasta corregir la cantidad', async () => {
+    localStorage.setItem('el-arcangel:consultation:v1', JSON.stringify({ items: [{ id: 'variant-1', name: product.name, quantity: 5 }] }));
+    const user = userEvent.setup();
+    render(<ConsultationProvider><Consultation products={[{ ...product, variants: [{ ...product.variants![0], stock: 2 }] }]} /></ConsultationProvider>);
+    const button = await screen.findByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    expect(screen.getByRole('alert').textContent).toContain('El stock cambió');
+    const quantity = screen.getByRole('spinbutton', { name: 'Cantidad de Set sahumerios | Natural' });
+    await user.clear(quantity); await user.type(quantity, '2'); await user.tab();
+    expect(button.disabled).toBe(false);
+});
+
+test('Una lista mixta conserva los artículos válidos y avisa que el subtotal excluye los faltantes', async () => {
+    localStorage.setItem('el-arcangel:consultation:v1', JSON.stringify({ items: [{ id: 'variant-1', name: product.name, quantity: 1 }, { id: 'deleted', name: 'Artículo anterior', quantity: 4 }] }));
+    const user = userEvent.setup();
+    render(<ConsultationProvider><Consultation products={[product]} /></ConsultationProvider>);
+    expect(await screen.findByRole('heading', { name: 'Set sahumerios | Natural' })).toBeTruthy();
+    expect(screen.getByRole('heading', { name: 'Artículo anterior' })).toBeTruthy();
+    expect(screen.getByText(/excluye artículos para revisar/)).toBeTruthy();
+    const button = screen.getByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Quitar Artículo anterior' }));
+    expect(button.disabled).toBe(false);
+    expect(screen.getByRole('heading', { name: 'Set sahumerios | Natural' })).toBeTruthy();
+});
+
+test('Muestra los artículos guardados que ya no encuentra en el catálogo sin ocultar la lista', async () => {
+    localStorage.setItem('el-arcangel:consultation:v1', JSON.stringify({ items: [{ id: 'old-variant', name: 'Producto guardado', quantity: 5 }] }));
+    const user = userEvent.setup();
+    render(<ConsultationProvider><Consultation products={[product]} /></ConsultationProvider>);
+    expect(await screen.findByRole('heading', { name: 'Producto guardado' })).toBeTruthy();
+    expect(screen.getByText(/Cantidad guardada: 5/)).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Tu consulta está vacía' })).toBeNull();
+    expect((screen.getByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement).disabled).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Quitar Producto guardado' }));
+    expect(screen.getByRole('heading', { name: 'Tu consulta está vacía' })).toBeTruthy();
+});
+
+test('El mínimo mayorista bloquea el envío hasta alcanzar el importe exacto', async () => {
+    localStorage.setItem('el-arcangel:consultation:v1', JSON.stringify({ items: [{ id: 'variant-1', name: product.name, quantity: 1 }] }));
+    const user = userEvent.setup();
+    render(<ConsultationProvider><Consultation products={[product]} purchaseType="WHOLESALE" wholesaleMinimum={13000} /></ConsultationProvider>);
+    const button = await screen.findByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement;
+    expect(button.disabled).toBe(true);
+    expect(screen.getAllByText(/Te falta/)).toHaveLength(2);
+    const quantity = screen.getByRole('spinbutton', { name: 'Cantidad de Set sahumerios | Natural' });
+    await user.clear(quantity);
+    await user.type(quantity, '2');
+    await user.tab();
+    expect(button.disabled).toBe(false);
+    expect(screen.getByText(/Tu pedido alcanza el mínimo/)).toBeTruthy();
+});
 
 test('El stock limita las tarjetas, la ficha y la edición de la consulta', async () => {
     const user = setup();
@@ -86,14 +153,12 @@ test('Las variantes distintas del mismo producto conservan sus propias cantidade
     expect((screen.getByRole('spinbutton', { name: 'Cantidad de Set sahumerios | Lavanda' }) as HTMLInputElement).value).toBe('1');
 });
 
-test('Recupera productos y modo al recargar, y conserva el vaciado', async () => {
+test('Recupera productos al recargar, y conserva el vaciado', async () => {
     let user = setup();
     await user.click(screen.getByRole('button', { name: 'Agregar Set sahumerios a mi consulta' }));
-    await user.click(screen.getByRole('radio', { name: 'Por mayor' }));
     cleanup();
     user = setup();
     expect(screen.getByRole('heading', { name: 'Set sahumerios | Natural' })).toBeTruthy();
-    expect((screen.getByRole('radio', { name: 'Por mayor' }) as HTMLInputElement).checked).toBe(true);
     await user.click(screen.getByRole('button', { name: 'Vaciar consulta' }));
     cleanup();
     setup();
@@ -116,10 +181,10 @@ test('Solo abre WhatsApp y vacía la lista después de guardar; un error permite
     await user.click(screen.getByRole('button', { name: 'Agregar Set sahumerios a mi consulta' }));
     await user.click(screen.getByRole('button', { name: 'Continuar por WhatsApp' }));
     expect(await screen.findByText('No se pudo guardar')).toBeTruthy();
-    expect(openWhatsApp).not.toHaveBeenCalled();
+    expect(openWhatsApp).toHaveBeenCalledTimes(1);
     expect(screen.getByRole('heading', { name: 'Set sahumerios | Natural' })).toBeTruthy();
     await user.click(screen.getByRole('button', { name: 'Continuar por WhatsApp' }));
-    await waitFor(() => expect(openWhatsApp).toHaveBeenCalledWith('5491112345678', expect.stringContaining('Set sahumerios | Natural')));
+    await waitFor(() => expect(openWhatsApp).toHaveBeenCalledWith('5491112345678', expect.stringContaining('Set sahumerios | Natural'), expect.any(Function)));
     expect(screen.getByRole('heading', { name: 'Tu consulta está vacía' })).toBeTruthy();
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).idempotencyKey).toBe(JSON.parse(fetchMock.mock.calls[1][1].body).idempotencyKey);
     cleanup();
