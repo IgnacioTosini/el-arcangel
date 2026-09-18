@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateProductCard } from './productCard.animation';
 
 import Image from 'next/image';
 import ProductPrice from '@/components/ui/productPrice/ProductPrice';
@@ -34,13 +36,14 @@ const availabilityLabels = {
 };
 
 export default function ProductCard({ product: source, onAdd }: ProductCardProps) {
+    const animationRef = useAnimation<HTMLElement>(animateProductCard);
     const variant = source.variants?.find(item => item.id === source.defaultVariantId);
     const product: ProductCardData = variant ? { ...source, price: variant.price, compareAtPrice: variant.compareAtPrice, stock: variant.stock, defaultVariantName: variant.name, priceFrom: false, availability: variant.stock === 0 ? 'unavailable' : variant.stock == null ? 'inquiry' : 'available' } : source;
     const { items } = useConsultation();
     const inCart = items.find(item => item.id === product.defaultVariantId)?.quantity ?? 0;
     const atLimit = inCart >= Math.min(999, product.stock ?? 999);
     return (
-        <article className="productCardContent">
+        <article ref={animationRef} className="productCardContent">
             <Link href={product.href} className="productCardPicture" aria-label={`Ver ${product.name}`}>
                 <Image
                     src={product.imageUrl}

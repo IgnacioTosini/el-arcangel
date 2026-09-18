@@ -1,13 +1,16 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateFooter } from './footer.animation';
 import Link from 'next/link';
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { readHomeContent } from '@/lib/home-content';
 import './_footer.scss';
 
 export default function Footer() {
+    const animationRef = useAnimation<HTMLElement>(animateFooter);
     const { settings } = useSiteSettings();
     return (
-        <footer className="footerContent">
+        <footer ref={animationRef} className="footerContent">
             <div className="footerInner">
                 <div className="footerBrand">
                     <Link href="/" className="footerBrandLink" aria-label={`${settings.name}, inicio`}>{settings.name.toLocaleUpperCase('es')}</Link>

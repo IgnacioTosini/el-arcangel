@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateWholesaleAccount } from './wholesaleAccount.animation';
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
@@ -7,6 +9,7 @@ import './_wholesaleAccount.scss';
 
 type Account = { name: string; business: string; status: 'PENDING' | 'APPROVED' | 'REJECTED' };
 export default function WholesaleAccount({ account }: { account: Account | null }) {
+    const animationRef = useAnimation<HTMLElement>(animateWholesaleAccount);
     const router = useRouter();
     const { settings } = useSiteSettings();
     const [request, setRequest] = useState<{ name: string; business: string; email: string } | null>(null);
@@ -35,7 +38,7 @@ export default function WholesaleAccount({ account }: { account: Account | null 
         catch { setError('No se pudo cerrar la sesión.'); }
         finally { setBusy(false); }
     }
-    return <section className="wholesaleAccount">
+    return <section ref={animationRef} className="wholesaleAccount">
         <p className="wholesaleAccountEyebrow">EL ARCÁNGEL · MAYORISTAS</p>
         <h1>{account ? `Hola, ${account.name}` : register ? 'Solicitá tu cuenta mayorista' : 'Ingresá a tu cuenta mayorista'}</h1>
         {account ? <>

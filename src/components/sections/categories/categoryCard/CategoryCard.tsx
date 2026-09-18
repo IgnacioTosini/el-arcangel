@@ -1,3 +1,6 @@
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateCategoryCard } from './categoryCard.animation';
 import Image from 'next/image';
 import Link from 'next/link';
 import './_categoryCard.scss';
@@ -9,8 +12,9 @@ export type CategoryCardProps = {
 };
 
 export default function CategoryCard({ name, slug, imageUrl }: CategoryCardProps) {
+    const animationRef = useAnimation<HTMLAnchorElement>(animateCategoryCard);
     return (
-        <Link href={`/catalogo?categoria=${encodeURIComponent(slug)}`} className="categoryCardContent">
+        <Link ref={animationRef} href={`/catalogo?categoria=${encodeURIComponent(slug)}`} className="categoryCardContent">
             <picture className="categoryCardPicture">
                 <Image
                     src={imageUrl}

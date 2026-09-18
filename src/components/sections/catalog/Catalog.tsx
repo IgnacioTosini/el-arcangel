@@ -1,7 +1,9 @@
-﻿'use client';
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateCatalog } from './catalog.animation';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import ProductCard, { type ProductCardData } from '@/components/cards/productCard/ProductCard';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
 import ProductSearch from '@/components/ui/productSearch/ProductSearch';
@@ -12,8 +14,8 @@ import { filterProducts, parseFilters, type CatalogFiltersValue } from './catalo
 import './_catalog.scss';
 
 export default function Catalog({ products: catalogProducts, categories, purchaseType = 'RETAIL' }: { products: CatalogProduct[]; categories: { value: string; label: string }[]; purchaseType?: 'RETAIL' | 'WHOLESALE' }) {
+    const animationRef = useAnimation<HTMLDivElement>(animateCatalog);
     const params = useSearchParams();
-    const router = useRouter();
     const pathname = usePathname();
     const { addItem } = useConsultation();
     const filters = parseFilters(params.get('categoria'), params.get('orden'));
@@ -32,7 +34,7 @@ export default function Catalog({ products: catalogProducts, categories, purchas
         const next = new URLSearchParams(params.toString());
         if (value.category) next.set('categoria', value.category); else next.delete('categoria');
         if (value.sort !== 'newest') next.set('orden', value.sort); else next.delete('orden');
-        router.push(`${pathname}${next.size ? `?${next}` : ''}`, { scroll: false });
+        window.history.pushState(null, '', `${pathname}${next.size ? `?${next}` : ''}${window.location.hash}`);
     }
 
     function handleAdd(product: ProductCardData) {
@@ -40,7 +42,7 @@ export default function Catalog({ products: catalogProducts, categories, purchas
     }
 
     return (
-        <div className="catalogContent">
+        <div ref={animationRef} className="catalogContent">
             <header className="catalogHeader">
                 <h1>Catálogo</h1>
                 <p>{purchaseType === 'WHOLESALE' ? 'Precios mayoristas · cuenta aprobada' : 'Precios minoristas'}</p>
@@ -68,7 +70,7 @@ export default function Catalog({ products: catalogProducts, categories, purchas
                 <div className="catalogEmpty">
                     <h2>No encontramos productos</h2>
                     <p>Probá con otra búsqueda o quitá los filtros.</p>
-                    <button className="catalogButton" type="button" onClick={() => router.push('/catalogo', { scroll: false })}>Ver todos los productos</button>
+                    <button className="catalogButton" type="button" onClick={() => window.history.pushState(null, '', pathname)}>Ver todos los productos</button>
                 </div>
             )}
         </div>

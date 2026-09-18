@@ -1,13 +1,16 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateLocal } from './local.animation';
 
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import InquiryCallout from './inquiryCallout/InquiryCallout';
 import './_local.scss';
 
 export default function Local() {
+    const animationRef = useAnimation<HTMLElement>(animateLocal);
     const { settings } = useSiteSettings();
     return (
-        <section className="localContent" aria-labelledby="localTitle">
+        <section ref={animationRef} className="localContent" aria-labelledby="localTitle">
             <h1 id="localTitle" className="localTitle">El local</h1>
             <p className="localDescription">
                 {settings.name} es una santería y regalería con venta por mayor y menor: sahumerios,

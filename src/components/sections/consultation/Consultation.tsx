@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateConsultation } from './consultation.animation';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,6 +15,7 @@ import './_consultation.scss';
 import { customerDetailsError } from '@/lib/customer-validation';
 
 export default function Consultation({ products: catalogProducts, purchaseType = 'RETAIL', account, wholesaleMinimum = 0, wholesaleMinimumUnits = 2 }: { products: CatalogProduct[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; account?: { name: string; business: string; phone?: string } | null; wholesaleMinimum?: number; wholesaleMinimumUnits?: number }) {
+    const animationRef = useAnimation<HTMLDivElement>(animateConsultation);
     const { items, updateQuantity, removeItem, clearItems } = useConsultation();
     const router = useRouter();
     const submission = useRef({ fingerprint: '', key: '' });
@@ -44,7 +47,7 @@ export default function Consultation({ products: catalogProducts, purchaseType =
         return `Consulta CONS-${String(result.number).padStart(4, '0')} enviada al local.`;
     }
     return (
-        <div className="consultationContent">
+        <div ref={animationRef} className="consultationContent">
             <header className="consultationHeader">
                 <h1>Mi consulta</h1>
                 <p>Esta lista no es una compra: la enviás y te respondemos con precios finales y disponibilidad.</p>

@@ -1,3 +1,6 @@
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateFaq } from './faq.animation';
 import './_faq.scss';
 
 type FaqItem = {
@@ -11,8 +14,9 @@ type FaqProps = {
 };
 
 export default function Faq({ title = 'Preguntas frecuentes', items }: FaqProps) {
+    const animationRef = useAnimation<HTMLElement>(animateFaq);
     return (
-        <section className="faqContent" aria-label={title}>
+        <section ref={animationRef} className="faqContent" aria-label={title}>
             <h2 className="faqTitle">{title}</h2>
             <dl className="faqList">
                 {items.map(({ question, answer }) => (

@@ -1,4 +1,6 @@
-﻿'use client';
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateFeatured } from './featured.animation';
 
 import { defaultHomeContent } from '@/lib/home-content';
 import Link from 'next/link';
@@ -10,6 +12,7 @@ import './_featured.scss';
 
 
 export default function Featured({ products: featuredProducts, purchaseType = 'RETAIL', title = defaultHomeContent.featuredTitle, buttonLabel = defaultHomeContent.featuredButton }: { products: ProductCardData[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; title?: string; buttonLabel?: string }) {
+    const animationRef = useAnimation<HTMLElement>(animateFeatured);
     const { addItem } = useConsultation();
 
     function handleAdd(product: ProductCardData) {
@@ -17,7 +20,7 @@ export default function Featured({ products: featuredProducts, purchaseType = 'R
     }
 
     return (
-        <section className="featuredContent" aria-labelledby="featuredTitle">
+        <section ref={animationRef} className="featuredContent" aria-labelledby="featuredTitle">
             <div className="featuredHeader">
                 <h2 id="featuredTitle" className="featuredTitle">{title}</h2>
                 <Link href="/catalogo" className="featuredLink">{buttonLabel} <span aria-hidden="true">→</span></Link>

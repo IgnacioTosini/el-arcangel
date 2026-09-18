@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateProductDetail } from './productDetail.animation';
 import { useState } from 'react';
 import Link from 'next/link';
 import ProductPrice from '@/components/ui/productPrice/ProductPrice';
@@ -8,12 +10,13 @@ import ProductPurchase from './productPurchase/ProductPurchase';
 import './_productDetail.scss';
 
 export default function ProductDetail({ product, purchaseType = 'RETAIL' }: { product: CatalogProduct; purchaseType?: 'RETAIL' | 'WHOLESALE' }) {
+    const animationRef = useAnimation<HTMLDivElement>(animateProductDetail);
     const [variantId, setVariantId] = useState(product.defaultVariantId ?? product.variants?.[0]?.id ?? '');
     const variant = product.variants?.find(item => item.id === variantId);
     const selectedAvailability = variant ? variant.stock === 0 ? 'unavailable' : variant.stock == null ? 'inquiry' : 'available' : product.availability;
     const availability = { available: 'Disponible', unavailable: 'Agotado', inquiry: 'Consultar disponibilidad' };
     return (
-        <div className="productDetailContent">
+        <div ref={animationRef} className="productDetailContent">
             <nav className="productDetailBreadcrumbs" aria-label="Ruta de navegación">
                 <ol>
                     <li><Link href="/">Inicio</Link></li>

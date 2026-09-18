@@ -1,10 +1,14 @@
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateWholesale } from './wholesale.animation';
 import { defaultHomeContent, type HomeContent } from '@/lib/home-content';
 import Link from 'next/link';
 import './_wholesale.scss';
 
 export default function Wholesale({ content = defaultHomeContent }: { content?: HomeContent }) {
+    const animationRef = useAnimation<HTMLElement>(animateWholesale);
     return (
-        <section className="wholesaleContent" aria-labelledby="wholesaleTitle">
+        <section ref={animationRef} className="wholesaleContent" aria-labelledby="wholesaleTitle">
             <div className="wholesaleInner">
                 <h2 id="wholesaleTitle" className="wholesaleTitle">{content.wholesaleTitle}</h2>
                 <p className="wholesaleDescription">{content.wholesaleDescription}</p>

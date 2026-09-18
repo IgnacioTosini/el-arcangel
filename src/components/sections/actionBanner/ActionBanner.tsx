@@ -1,3 +1,6 @@
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateActionBanner } from './actionBanner.animation';
 import Link from 'next/link';
 import './_actionBanner.scss';
 
@@ -14,8 +17,9 @@ type ActionBannerProps = {
 };
 
 export default function ActionBanner({ title, description, primaryAction, secondaryAction }: ActionBannerProps) {
+    const animationRef = useAnimation<HTMLElement>(animateActionBanner);
     return (
-        <section className="actionBannerContent" aria-label={title}>
+        <section ref={animationRef} className="actionBannerContent" aria-label={title}>
             <h2 className="actionBannerTitle">{title}</h2>
             <p className="actionBannerDescription">{description}</p>
             <div className="actionBannerButtons">

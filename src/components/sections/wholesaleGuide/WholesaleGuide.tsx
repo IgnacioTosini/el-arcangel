@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateWholesaleGuide } from './wholesaleGuide.animation';
 import Link from 'next/link';
 
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
@@ -20,9 +22,10 @@ const questions = [
 ];
 
 export default function WholesaleGuide() {
+    const animationRef = useAnimation<HTMLDivElement>(animateWholesaleGuide);
     const { settings } = useSiteSettings();
     return (
-        <div className="wholesaleGuideContent">
+        <div ref={animationRef} className="wholesaleGuideContent">
             <header className="wholesaleGuideHeader">
                 <h1 className="wholesaleGuideTitle">Venta por mayor</h1>
                 <p className="wholesaleGuideDescription">

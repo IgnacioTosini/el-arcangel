@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateConsultationItem } from './consultationItem.animation';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,11 +11,12 @@ import './_consultationItem.scss';
 type ConsultationItemProps = ConsultationLine & { onQuantityChange: (quantity: number) => void; onRemove: () => void };
 
 export default function ConsultationItem({ product, quantity, onQuantityChange, onRemove }: ConsultationItemProps) {
+    const animationRef = useAnimation<HTMLElement>(animateConsultationItem);
     const id = useId();
     const [draft, setDraft] = useState<string | null>(null);
     const limit = Math.min(999, product.stock ?? 999);
     return (
-        <article className="consultationItemContent">
+        <article ref={animationRef} className="consultationItemContent">
             <Link href={product.href} className="consultationItemImage"><Image src={product.imageUrl} alt={product.name} width={64} height={80} /></Link>
             <div className="consultationItemInfo">
                 <h2><Link href={product.href}>{product.name}</Link></h2>

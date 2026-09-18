@@ -1,4 +1,6 @@
 'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateNavbar, animateNavbarCount } from './navbar.animation';
 
 import Link from 'next/link';
 import ProductSearch from '@/components/ui/productSearch/ProductSearch';
@@ -12,8 +14,10 @@ type NavbarProps = {
 };
 
 export default function Navbar({ consultationCount, hasWholesaleSession = false }: NavbarProps) {
+    const animationRef = useAnimation<HTMLElement>(animateNavbar);
     const { count } = useConsultation();
     const itemCount = consultationCount ?? count;
+    const countRef = useAnimation<HTMLSpanElement>(animateNavbarCount, itemCount);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -22,7 +26,7 @@ export default function Navbar({ consultationCount, hasWholesaleSession = false 
     }
 
     return (
-        <header className="navbarContent" onKeyDown={(event) => {
+        <header ref={animationRef} className="navbarContent" onKeyDown={(event) => {
             if (event.key === 'Escape' && isMenuOpen) {
                 closeMenu();
                 menuButtonRef.current?.focus();
@@ -48,7 +52,7 @@ export default function Navbar({ consultationCount, hasWholesaleSession = false 
                 </Link>
                 <Link href="/mi-consulta" className="navbarConsultation" onClick={closeMenu}>
                     <span>Mi consulta</span>
-                    <span className="navbarCount" aria-label={`${itemCount} artículos`}>
+                    <span ref={countRef} className="navbarCount" aria-label={`${itemCount} artículos`}>
                         {itemCount}
                     </span>
                 </Link>

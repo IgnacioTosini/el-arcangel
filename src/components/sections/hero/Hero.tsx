@@ -1,11 +1,15 @@
+'use client';
+import { useAnimation } from '@/lib/use-animation';
+import { animateHero } from './hero.animation';
 import { defaultHomeContent, type HomeContent } from '@/lib/home-content';
 import Image from 'next/image';
 import Link from 'next/link';
 import './_hero.scss';
 
 export default function Hero({ content = defaultHomeContent }: { content?: HomeContent }) {
+    const animationRef = useAnimation<HTMLElement>(animateHero);
     return (
-        <section className="heroContent" aria-labelledby="heroTitle">
+        <section ref={animationRef} className="heroContent" aria-labelledby="heroTitle">
             <div className='heroInner'>
                 <h1 id="heroTitle" className='heroTitle'>{content.heroTitle}</h1>
                 <p className='heroSubtitle'>{content.heroSubtitle}</p>

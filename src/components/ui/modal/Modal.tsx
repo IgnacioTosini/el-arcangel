@@ -1,12 +1,14 @@
 'use client';
 
-import { useEffect, useId, useRef, type ReactNode, type RefObject } from 'react';
+import { useEffect, useId, type ReactNode, type RefObject } from 'react';
+import { useAnimation } from '@/lib/use-animation';
+import { animateModal } from './modal.animation';
 import './_modal.scss';
 
 type ModalProps = { title: string; onClose: () => void; children: ReactNode; variant?: 'default' | 'gallery'; dismissible?: boolean; initialFocusRef?: RefObject<HTMLElement | null>; descriptionId?: string };
 
 export default function Modal({ title, onClose, children, variant = 'default', dismissible = true, initialFocusRef, descriptionId }: ModalProps) {
-    const ref = useRef<HTMLDialogElement>(null);
+    const ref = useAnimation<HTMLDialogElement>(animateModal);
     const titleId = useId();
 
     useEffect(() => {
@@ -21,7 +23,7 @@ export default function Modal({ title, onClose, children, variant = 'default', d
             document.body.style.overflow = previousOverflow;
             previousFocus?.focus();
         };
-    }, [initialFocusRef]);
+    }, [initialFocusRef, ref]);
 
     return (
         <dialog ref={ref} className={`modalContent${variant === 'gallery' ? ' modalGallery' : ''}`} aria-labelledby={titleId} aria-describedby={descriptionId} onCancel={(event) => { event.preventDefault(); if (dismissible) onClose(); }} onClick={(event) => {
