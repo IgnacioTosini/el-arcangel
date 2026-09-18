@@ -1,10 +1,12 @@
 import 'dotenv/config';
-import { expect, test, vi } from 'vitest';
-import { NextRequest } from 'next/server';
 import { randomUUID } from 'node:crypto';
+
+import { NextRequest } from 'next/server';
+import { expect, test, vi } from 'vitest';
+
+import { DELETE as deleteAccount, PATCH } from '@/app/api/admin/wholesale/route';
+import { DELETE, POST } from '@/app/api/wholesale/account/route';
 import { prisma } from '@/lib/prisma';
-import { POST, DELETE } from '@/app/api/wholesale/account/route';
-import { PATCH, DELETE as deleteAccount } from '@/app/api/admin/wholesale/route';
 import { createWholesaleSession, readWholesaleSession } from '@/lib/wholesale-auth';
 
 const { auth } = vi.hoisted(() => ({ auth: { allowed: false } }));

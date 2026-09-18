@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
-import { pageMetadata, siteUrl } from '@/lib/seo';
-import { Karla, Cormorant_Garamond } from "next/font/google";
+import { Cormorant_Garamond, Karla } from "next/font/google";
+
 import SiteFrame from "@/components/layout/SiteFrame";
 import ConsultationProvider from "@/components/providers/ConsultationProvider";
 import SiteSettingsProvider from "@/components/providers/SiteSettingsProvider";
-import "./globals.scss";
 import { ToastProvider } from '@/components/providers/ToastProvider';
+import { pageMetadata, siteUrl } from '@/lib/seo';
 import { getWholesaleAccount } from '@/lib/wholesale-auth';
+
+import type { Metadata } from "next";
+
+import "./globals.scss";
 
 const karla = Karla({
   variable: "--font-karla",

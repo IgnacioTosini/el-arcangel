@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { afterEach, expect, test, vi } from 'vitest';
+
 import { openWhatsApp } from '@/lib/open-whatsapp';
 afterEach(() => vi.restoreAllMocks());
 

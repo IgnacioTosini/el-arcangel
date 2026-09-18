@@ -2,8 +2,11 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+
 import Modal from '@/components/ui/modal/Modal';
+
 import ZoomableImage from './ZoomableImage';
+
 import './_productGallery.scss';
 
 type ProductGalleryProps = { imageUrl: string; name: string };

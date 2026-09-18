@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { afterEach, expect, test, vi } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { afterEach, expect, test, vi } from 'vitest';
+
 import ConsultationProvider, { useConsultation } from '@/components/providers/ConsultationProvider';
 
 vi.mock('@/components/ui/consultationToast/ConsultationToast', () => ({ notifyConsultationAdded: vi.fn() }));

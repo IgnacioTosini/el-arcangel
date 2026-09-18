@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
-import { useAdmin } from '../AdminProvider';
-import DeleteRecordButton from '../DeleteRecordButton';
-import type { AdminRecord } from '../adminModels';
-import CatalogForm from '../catalogForm/CatalogForm';
+import { useState } from 'react';
+
 import { isDisplayableImage, sortProductImages } from '@/lib/product-images';
+
+import { useAdmin } from '../AdminProvider';
+import CatalogForm from '../catalogForm/CatalogForm';
+import DeleteRecordButton from '../DeleteRecordButton';
+
+import type { AdminRecord } from '../adminModels';
+
 import './_productEditor.scss';
 
 export default function ProductEditor({ product, initiallyOpen = false, onClose }: { product: AdminRecord; initiallyOpen?: boolean; onClose?: () => void }) {

@@ -1,9 +1,11 @@
 import 'dotenv/config';
-import { expect, test } from 'vitest';
 import { randomUUID } from 'node:crypto';
-import { prisma } from '@/lib/prisma';
-import { writableFields, readAdminData } from '@/lib/admin-database';
+
+import { expect, test } from 'vitest';
+
+import { readAdminData, writableFields } from '@/lib/admin-database';
 import { readCatalog } from '@/lib/catalog-database';
+import { prisma } from '@/lib/prisma';
 
 test('Precios mayoristas independientes, opcionales y privados', async () => {
     if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(process.env.DATABASE_URL ?? '').hostname)) throw new Error('Esta prueba requiere PostgreSQL local.');

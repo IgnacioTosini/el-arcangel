@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+
 import CatalogForm from '@/components/admin/catalogForm/CatalogForm';
-import type { AdminRecord } from '@/components/admin/adminModels';
 import { ImageService } from '@/services/ImageService';
+
+import type { AdminRecord } from '@/components/admin/adminModels';
 
 const { refreshData } = vi.hoisted(() => ({ refreshData: vi.fn() }));
 vi.mock('@/components/admin/AdminProvider', () => ({ useAdmin: () => ({

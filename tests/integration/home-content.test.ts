@@ -1,9 +1,10 @@
 import 'dotenv/config';
-import { expect, test, vi } from 'vitest';
 import { NextRequest } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import { expect, test, vi } from 'vitest';
+
 import { PATCH } from '@/app/api/settings/route';
 import { defaultHomeContent, readHomeContent } from '@/lib/home-content';
+import { prisma } from '@/lib/prisma';
 vi.mock('@/lib/admin-session', () => ({ isAdminAuthenticated: async () => true }));
 
 test('Publica los textos juntos, conserva datos del local y rechaza una edición inválida', async () => {

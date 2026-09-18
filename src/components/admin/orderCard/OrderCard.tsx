@@ -1,12 +1,16 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Modal from '@/components/ui/modal/Modal';
-import { useAdmin } from '../AdminProvider';
-import type { AdminRecord } from '../adminModels';
-import { statusLabels } from '../adminOverview/AdminOverview';
+
 import { formatAmount } from '@/components/sections/consultation/consultationUtils';
+import Modal from '@/components/ui/modal/Modal';
+
+import { statusLabels } from '../adminOverview/AdminOverview';
+import { useAdmin } from '../AdminProvider';
 import InlineFields from '../inlineFields/InlineFields';
+
+import type { AdminRecord } from '../adminModels';
+
 import './_orderCard.scss';
 
 export default function OrderCard({ order }: { order: AdminRecord }) {

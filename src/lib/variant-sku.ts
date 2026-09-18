@@ -1,5 +1,6 @@
-import type { Prisma } from '@prisma/client';
 import { AdminValidationError } from './admin-database';
+
+import type { Prisma } from '@prisma/client';
 
 export async function resolveVariantSku(tx: Prisma.TransactionClient, value: unknown, previous?: string, reserved: Set<string> = new Set()) {
     if (value !== undefined && value !== null && typeof value !== 'string') throw new AdminValidationError('El SKU debe ser un texto.');

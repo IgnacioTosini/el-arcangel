@@ -1,7 +1,9 @@
-import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { isAdminAuthenticated } from '@/lib/admin-session';
+
 import AdminLogin from '@/components/admin/adminLogin/AdminLogin';
+import { isAdminAuthenticated } from '@/lib/admin-session';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = { title: 'Ingresar | El Arcángel', robots: { index: false, follow: false } };
 

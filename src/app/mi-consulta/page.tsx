@@ -1,8 +1,9 @@
+import Consultation from '@/components/sections/consultation/Consultation';
 import { readCustomerCatalog } from '@/lib/customer-catalog';
 import { prisma } from '@/lib/prisma';
-export const dynamic = 'force-dynamic';
+
 import type { Metadata } from 'next';
-import Consultation from '@/components/sections/consultation/Consultation';
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = { title: 'Mi consulta | El Arcángel', robots: { index: false, follow: true }, description: 'Armá tu consulta por mayor o por menor y consultanos precios y disponibilidad.' };
 

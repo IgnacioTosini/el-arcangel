@@ -1,6 +1,6 @@
 'use client';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 // Refresh server prices, availability and session permissions when returning to a tab.
 export default function RefreshOnReturn() {

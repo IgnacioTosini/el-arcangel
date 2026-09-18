@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useAdmin } from '../AdminProvider';
+
 import { adminSections } from '../adminNavigation';
+import { useAdmin } from '../AdminProvider';
 
 export const statusLabels: Record<string, string> = { PENDING: 'Pendiente', COMPLETED: 'Venta realizada', INQUIRY_ONLY: 'Solo consulta', CANCELLED: 'Cancelado', RETAIL: 'Minorista', WHOLESALE: 'Mayorista' };
 

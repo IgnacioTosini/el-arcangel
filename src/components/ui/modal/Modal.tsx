@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect, useId, type ReactNode, type RefObject } from 'react';
+import { type ReactNode, type RefObject, useEffect, useId } from 'react';
+
 import { useAnimation } from '@/lib/use-animation';
+
 import { animateModal } from './modal.animation';
+
 import './_modal.scss';
 
 type ModalProps = { title: string; onClose: () => void; children: ReactNode; variant?: 'default' | 'gallery'; dismissible?: boolean; initialFocusRef?: RefObject<HTMLElement | null>; descriptionId?: string };

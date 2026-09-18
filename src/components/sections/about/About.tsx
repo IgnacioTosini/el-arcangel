@@ -1,7 +1,9 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateAbout } from './about.animation';
 import { defaultHomeContent, type HomeContent } from '@/lib/home-content';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateAbout } from './about.animation';
+
 import './_about.scss';
 
 type AboutProps = {

@@ -1,9 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
+
 import { useConsultation } from '@/components/providers/ConsultationProvider';
+import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { openWhatsApp } from '@/lib/open-whatsapp';
+
 import './_messagePreview.scss';
 
 export default function MessagePreview({ message, onSubmit, blocked = false, blockedReason }: { message: string; onSubmit: () => Promise<string>; blocked?: boolean; blockedReason?: string }) {

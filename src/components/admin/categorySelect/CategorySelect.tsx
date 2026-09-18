@@ -1,8 +1,11 @@
 'use client';
 
 import { useId, useState } from 'react';
-import type { AdminRecord } from '../adminModels';
+
 import { slugify } from '@/lib/slug';
+
+import type { AdminRecord } from '../adminModels';
+
 import './_categorySelect.scss';
 
 export default function CategorySelect({ categories, value, onChange }: { categories: AdminRecord[]; value: string[]; onChange: (ids: string[]) => void }) {

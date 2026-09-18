@@ -1,8 +1,10 @@
 'use client';
 
 import { useId } from 'react';
+
 import type { AdminRecord } from '../adminModels';
 import type { InlineField } from '../inlineFields/InlineFields';
+
 import '../inlineFields/_inlineFields.scss';
 
 export default function DraftFields({ record, fields, onChange }: {

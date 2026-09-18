@@ -1,10 +1,13 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
-import ProductPrice from '@/components/ui/productPrice/ProductPrice';
-import { useId, useState, type FormEvent } from 'react';
+import { type FormEvent, useId, useState } from 'react';
+
 import { useConsultation } from '@/components/providers/ConsultationProvider';
+import ProductPrice from '@/components/ui/productPrice/ProductPrice';
+
 import type { CatalogProduct } from '@/data/products';
+
 import './_productPurchase.scss';
 
 export default function ProductPurchase({ product, selectedVariantId, onVariantChange }: { product: CatalogProduct; selectedVariantId?: string; onVariantChange?: (id: string) => void }) {

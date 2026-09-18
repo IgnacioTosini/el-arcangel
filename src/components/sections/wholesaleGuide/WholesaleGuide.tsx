@@ -1,12 +1,14 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateWholesaleGuide } from './wholesaleGuide.animation';
 import Link from 'next/link';
 
-import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import StepCard, { type StepCardProps } from '@/components/cards/stepCard/StepCard';
+import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import ActionBanner from '@/components/sections/actionBanner/ActionBanner';
 import Faq from '@/components/sections/faq/Faq';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateWholesaleGuide } from './wholesaleGuide.animation';
+
 import './_wholesaleGuide.scss';
 
 const steps: StepCardProps[] = [

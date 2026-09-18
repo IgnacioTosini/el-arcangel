@@ -1,11 +1,14 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateNavbar, animateNavbarCount } from './navbar.animation';
 
 import Link from 'next/link';
-import ProductSearch from '@/components/ui/productSearch/ProductSearch';
 import { useRef, useState } from 'react';
+
 import { useConsultation } from '@/components/providers/ConsultationProvider';
+import ProductSearch from '@/components/ui/productSearch/ProductSearch';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateNavbar, animateNavbarCount } from './navbar.animation';
+
 import './_navbar.scss';
 
 type NavbarProps = {

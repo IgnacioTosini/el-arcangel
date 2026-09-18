@@ -1,8 +1,10 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateCategories } from './categories.animation';
 import { defaultHomeContent } from '@/lib/home-content';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateCategories } from './categories.animation';
 import CategoryCard, { type CategoryCardProps } from './categoryCard/CategoryCard';
+
 import './_categories.scss';
 
 export default function Categories({ categories, title = defaultHomeContent.categoriesTitle }: { categories: CategoryCardProps[]; title?: string }) {

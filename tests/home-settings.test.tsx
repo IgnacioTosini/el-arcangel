@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { afterEach, beforeEach, expect, test, vi } from 'vitest';
+
 import HomeSettings from '@/components/admin/homeSettings/HomeSettings';
 import Footer from '@/components/layout/footer/Footer';
 import { defaultHomeContent } from '@/lib/home-content';

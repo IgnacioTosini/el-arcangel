@@ -1,6 +1,7 @@
-import type { MetadataRoute } from 'next';
-import { siteUrl } from '@/lib/seo';
 import { prisma } from '@/lib/prisma';
+import { siteUrl } from '@/lib/seo';
+
+import type { MetadataRoute } from 'next';
 
 export const dynamic = 'force-dynamic';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

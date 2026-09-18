@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useRef } from 'react';
+
 import { ImageService, type UploadedImage } from '@/services/ImageService';
+
 import type { ImageUploadFolder } from '@/lib/image-upload-folders';
 
 export type DraftImageValue = UploadedImage & { file?: File };

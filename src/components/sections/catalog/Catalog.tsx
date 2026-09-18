@@ -1,16 +1,21 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateCatalog } from './catalog.animation';
 
-import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import ProductCard, { type ProductCardData } from '@/components/cards/productCard/ProductCard';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
-import ProductSearch from '@/components/ui/productSearch/ProductSearch';
 import Modal from '@/components/ui/modal/Modal';
-import type { CatalogProduct } from '@/data/products';
+import Pagination from '@/components/ui/pagination/Pagination';
+import ProductSearch from '@/components/ui/productSearch/ProductSearch';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateCatalog } from './catalog.animation';
 import CatalogFilters from './catalogFilters/CatalogFilters';
-import { filterProducts, parseFilters, type CatalogFiltersValue } from './catalogFilters/filterUtils';
+import { type CatalogFiltersValue, filterProducts, parseFilters } from './catalogFilters/filterUtils';
+
+import type { CatalogProduct } from '@/data/products';
+
 import './_catalog.scss';
 
 export default function Catalog({ products: catalogProducts, categories, purchaseType = 'RETAIL' }: { products: CatalogProduct[]; categories: { value: string; label: string }[]; purchaseType?: 'RETAIL' | 'WHOLESALE' }) {
@@ -21,6 +26,10 @@ export default function Catalog({ products: catalogProducts, categories, purchas
     const filters = parseFilters(params.get('categoria'), params.get('orden'));
     const query = params.get('q') ?? '';
     const products = filterProducts(catalogProducts, filters, query);
+    const pageSize = 12;
+    const requestedPage = Number(params.get('pagina') ?? 1);
+    const page = Math.min(Math.max(1, Number.isSafeInteger(requestedPage) ? requestedPage : 1), Math.max(1, Math.ceil(products.length / pageSize)));
+    const pagedProducts = products.slice((page - 1) * pageSize, page * pageSize);
     const [draft, setDraft] = useState<CatalogFiltersValue | null>(null);
 
     useEffect(() => {
@@ -32,6 +41,7 @@ export default function Catalog({ products: catalogProducts, categories, purchas
 
     function updateFilters(value: CatalogFiltersValue) {
         const next = new URLSearchParams(params.toString());
+        next.delete('pagina');
         if (value.category) next.set('categoria', value.category); else next.delete('categoria');
         if (value.sort !== 'newest') next.set('orden', value.sort); else next.delete('orden');
         window.history.pushState(null, '', `${pathname}${next.size ? `?${next}` : ''}${window.location.hash}`);
@@ -42,7 +52,7 @@ export default function Catalog({ products: catalogProducts, categories, purchas
     }
 
     return (
-        <div ref={animationRef} className="catalogContent">
+        <div id="catalog-results" ref={animationRef} className="catalogContent">
             <header className="catalogHeader">
                 <h1>Catálogo</h1>
                 <p>{purchaseType === 'WHOLESALE' ? 'Precios mayoristas · cuenta aprobada' : 'Precios minoristas'}</p>
@@ -64,7 +74,7 @@ export default function Catalog({ products: catalogProducts, categories, purchas
             )}
             {products.length ? (
                 <ul className="catalogGrid">
-                    {products.map((product) => <li key={product.id}><ProductCard product={product} onAdd={handleAdd} /></li>)}
+                    {pagedProducts.map((product) => <li key={product.id}><ProductCard product={product} onAdd={handleAdd} /></li>)}
                 </ul>
             ) : (
                 <div className="catalogEmpty">
@@ -73,6 +83,11 @@ export default function Catalog({ products: catalogProducts, categories, purchas
                     <button className="catalogButton" type="button" onClick={() => window.history.pushState(null, '', pathname)}>Ver todos los productos</button>
                 </div>
             )}
+            <Pagination showSinglePage page={page} total={products.length} pageSize={pageSize} targetId="catalog-results" onChange={nextPage => {
+                const next = new URLSearchParams(params.toString());
+                if (nextPage === 1) next.delete('pagina'); else next.set('pagina', String(nextPage));
+                window.history.pushState(null, '', `${pathname}${next.size ? `?${next}` : ''}`);
+            }} />
         </div>
     );
 }

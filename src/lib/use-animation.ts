@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
+
 import type { gsap } from 'gsap';
 
 export type ComponentAnimation = (root: HTMLElement, motion: typeof gsap) => void | (() => void);

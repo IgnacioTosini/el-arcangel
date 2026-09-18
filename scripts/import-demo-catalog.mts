@@ -1,8 +1,10 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
-import { readFile, writeFile, mkdir, rename } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+
+import { PrismaClient } from '@prisma/client';
+
 import { catalogCategories, catalogProducts } from '../src/data/products.ts';
 
 const db = new PrismaClient();

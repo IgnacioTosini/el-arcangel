@@ -1,4 +1,5 @@
 import { expect, test } from 'vitest';
+
 import { defaultHomeContent, readHomeContent, validateHomeContent } from '@/lib/home-content';
 
 test('Conserva los textos actuales hasta que se publique contenido', () => {

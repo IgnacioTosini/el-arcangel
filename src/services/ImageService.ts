@@ -1,5 +1,6 @@
 ﻿import axios from 'axios';
-import { isImageUploadFolder, type ImageUploadFolder } from '@/lib/image-upload-folders';
+
+import { type ImageUploadFolder, isImageUploadFolder } from '@/lib/image-upload-folders';
 import { validateImageFile } from '@/lib/image-upload-validation';
 
 export type UploadedImage = { url: string; public_id: string };

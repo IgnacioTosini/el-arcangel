@@ -1,5 +1,6 @@
-import type { Prisma } from '@prisma/client';
 import { AdminValidationError } from './admin-database';
+
+import type { Prisma } from '@prisma/client';
 
 export async function requirePublishedProductCategory(tx: Prisma.TransactionClient, id: string) {
     const invalid = await tx.product.findFirst({

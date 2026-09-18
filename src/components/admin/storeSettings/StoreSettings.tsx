@@ -1,8 +1,10 @@
 'use client';
 
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
-import InlineFields from '../inlineFields/InlineFields';
+
 import { useAdmin } from '../AdminProvider';
+import InlineFields from '../inlineFields/InlineFields';
+
 import './_storeSettings.scss';
 
 export default function StoreSettings() {

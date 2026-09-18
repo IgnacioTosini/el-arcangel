@@ -1,5 +1,7 @@
-import { afterAll, expect, test } from 'vitest';
 import { randomUUID } from 'node:crypto';
+
+import { afterAll, expect, test } from 'vitest';
+
 import { integrationContext } from './helpers';
 
 const { db, origin, cookie } = await integrationContext();

@@ -1,17 +1,22 @@
 'use client';
 
-import { useEffect, useState, type FormEvent } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useAdmin } from '../AdminProvider';
-import type { AdminRecord } from '../adminModels';
-import DraftFields from '../draftFields/DraftFields';
-import CategorySelect from '../categorySelect/CategorySelect';
-import DraftImage from '../draftImage/DraftImage';
-import { ImageService } from '@/services/ImageService';
-import { useDraftImages } from '../draftImage/useDraftImages';
-import { slugify } from '@/lib/slug';
+
 import { sortProductImages } from '@/lib/product-images';
+import { slugify } from '@/lib/slug';
+import { ImageService } from '@/services/ImageService';
+
+import { useAdmin } from '../AdminProvider';
+import CategorySelect from '../categorySelect/CategorySelect';
+import DraftFields from '../draftFields/DraftFields';
+import DraftImage from '../draftImage/DraftImage';
+import { useDraftImages } from '../draftImage/useDraftImages';
+
+import type { AdminRecord } from '../adminModels';
+
 import './_catalogForm.scss';
+
 
 type Props = { model: 'Product' | 'Category'; initial: AdminRecord; onClose: () => void };
 
@@ -42,8 +47,10 @@ export default function CatalogForm({ model, initial, onClose }: Props) {
             }
         };
         window.addEventListener('beforeunload', warn);
+        const guardPage = (event: Event) => { event.preventDefault(); toast.info('Guardá o cancelá el borrador antes de cambiar de página.'); };
+        document.addEventListener('admin:page-change', guardPage);
         document.addEventListener('click', guardNavigation, true);
-        return () => { window.removeEventListener('beforeunload', warn); document.removeEventListener('click', guardNavigation, true); };
+        return () => { window.removeEventListener('beforeunload', warn); document.removeEventListener('click', guardNavigation, true); document.removeEventListener('admin:page-change', guardPage); };
     }, [dirty]);
 
     function change(name: string, value: AdminRecord[string]) {

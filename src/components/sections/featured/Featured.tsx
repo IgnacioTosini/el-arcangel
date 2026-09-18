@@ -1,11 +1,14 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateFeatured } from './featured.animation';
 
-import { defaultHomeContent } from '@/lib/home-content';
 import Link from 'next/link';
+
 import ProductCard, { type ProductCardData } from '@/components/cards/productCard/ProductCard';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
+import { defaultHomeContent } from '@/lib/home-content';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateFeatured } from './featured.animation';
+
 import './_featured.scss';
 
 

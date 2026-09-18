@@ -1,6 +1,8 @@
 'use client';
 import { useAnimation } from '@/lib/use-animation';
+
 import { animateFaq } from './faq.animation';
+
 import './_faq.scss';
 
 type FaqItem = {

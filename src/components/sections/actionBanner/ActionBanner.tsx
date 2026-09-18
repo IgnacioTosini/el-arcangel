@@ -1,7 +1,10 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateActionBanner } from './actionBanner.animation';
 import Link from 'next/link';
+
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateActionBanner } from './actionBanner.animation';
+
 import './_actionBanner.scss';
 
 type BannerAction = {

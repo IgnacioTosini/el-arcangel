@@ -1,8 +1,9 @@
-import { beforeEach, expect, test, vi } from 'vitest';
 import axios from 'axios';
-import { ImageService } from '@/services/ImageService';
+import { beforeEach, expect, test, vi } from 'vitest';
+
 import { isImageUploadFolder } from '@/lib/image-upload-folders';
 import { validateImageFile } from '@/lib/image-upload-validation';
+import { ImageService } from '@/services/ImageService';
 
 vi.mock('axios', () => ({ default: { post: vi.fn(), delete: vi.fn(), isAxiosError: vi.fn(() => false) } }));
 beforeEach(() => vi.mocked(axios.post).mockReset());

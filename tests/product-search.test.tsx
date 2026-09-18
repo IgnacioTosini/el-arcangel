@@ -1,7 +1,8 @@
 // @vitest-environment jsdom
-import { afterEach, expect, test, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { afterEach, expect, test, vi } from 'vitest';
+
 import ProductSearch from '@/components/ui/productSearch/ProductSearch';
 import { matchesProduct } from '@/lib/product-search';
 

@@ -1,9 +1,12 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateHero } from './hero.animation';
-import { defaultHomeContent, type HomeContent } from '@/lib/home-content';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { defaultHomeContent, type HomeContent } from '@/lib/home-content';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateHero } from './hero.animation';
+
 import './_hero.scss';
 
 export default function Hero({ content = defaultHomeContent }: { content?: HomeContent }) {

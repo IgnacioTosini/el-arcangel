@@ -1,12 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+
+import { logoutAdmin } from '@/app/login/actions';
+
 import AdminNavbar from './adminNavbar/AdminNavbar';
 
+import type { ReactNode } from 'react';
 
 import './_admin.scss';
-import { logoutAdmin } from '@/app/login/actions';
 
 export default function AdminShell({ children }: { children: ReactNode }) {
 

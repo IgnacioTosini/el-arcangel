@@ -1,4 +1,5 @@
 import { prisma } from './prisma';
+
 import type { CatalogProduct } from '@/data/products';
 export async function readCatalog(purchaseType: 'RETAIL' | 'WHOLESALE' = 'RETAIL') {
     const [rows, categories] = await Promise.all([

@@ -1,12 +1,15 @@
 'use client';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ImageService } from '@/services/ImageService';
-import { useDraftImages, type DraftImageValue } from '../draftImage/useDraftImages';
-import DraftImage from '../draftImage/DraftImage';
+
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { defaultHomeContent, readHomeContent, validateHomeContent } from '@/lib/home-content';
+import { ImageService } from '@/services/ImageService';
+
+import DraftImage from '../draftImage/DraftImage';
+import { type DraftImageValue, useDraftImages } from '../draftImage/useDraftImages';
 import InlineFields from '../inlineFields/InlineFields';
+
 import '../storeSettings/_storeSettings.scss';
 
 export default function HomeSettings() {

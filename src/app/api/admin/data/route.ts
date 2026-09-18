@@ -1,12 +1,13 @@
-import { prisma } from '@/lib/prisma';
-import { NextRequest } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-session';
-import { adminDelegate, readAdminData, writableFields, AdminValidationError } from '@/lib/admin-database';
-import { adminModels, type AdminRecord } from '@/components/admin/adminModels';
 import { Prisma } from '@prisma/client';
-import { resolveVariantSku } from '@/lib/variant-sku';
-import { applyOrderStatus } from '@/lib/complete-order';
+import { NextRequest } from 'next/server';
+
+import { adminModels, type AdminRecord } from '@/components/admin/adminModels';
+import { adminDelegate, AdminValidationError, readAdminData, writableFields } from '@/lib/admin-database';
+import { isAdminAuthenticated } from '@/lib/admin-session';
 import { requireCategoryCanBeRemoved, requirePublishedProductCategory } from '@/lib/catalog-categories';
+import { applyOrderStatus } from '@/lib/complete-order';
+import { prisma } from '@/lib/prisma';
+import { resolveVariantSku } from '@/lib/variant-sku';
 export async function GET() {
     if (!await isAdminAuthenticated())
         return Response.json({ error: 'La sesión venció. Volvé a ingresar.' }, { status: 401 });

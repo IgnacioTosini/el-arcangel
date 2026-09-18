@@ -1,6 +1,7 @@
 import { cache } from 'react';
-import { getApprovedWholesaleAccount } from './wholesale-auth';
+
 import { readCatalog } from './catalog-database';
+import { getApprovedWholesaleAccount } from './wholesale-auth';
 
 export const readCustomerCatalog = cache(async () => {
     const account = await getApprovedWholesaleAccount();

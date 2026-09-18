@@ -1,8 +1,9 @@
-﻿'use client';
+'use client';
 
 import { useId } from 'react';
 
-import { sortOptions, type CatalogFiltersValue } from './filterUtils';
+import { type CatalogFiltersValue, sortOptions } from './filterUtils';
+
 import './_catalogFilters.scss';
 
 type CatalogFiltersProps = {

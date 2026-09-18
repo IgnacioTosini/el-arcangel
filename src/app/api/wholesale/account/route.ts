@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
+
 import { prisma } from '@/lib/prisma';
-import { hashPassword, checkPassword, createWholesaleSession, getWholesaleAccount, wholesaleCookie, sessionDuration, tokenHash } from '@/lib/wholesale-auth';
+import { checkPassword, createWholesaleSession, getWholesaleAccount, hashPassword, sessionDuration, tokenHash, wholesaleCookie } from '@/lib/wholesale-auth';
 
 export async function GET() { return NextResponse.json(await getWholesaleAccount(), { headers: { 'Cache-Control': 'no-store' } }); }
 

@@ -1,11 +1,13 @@
-import { NextRequest } from 'next/server';
 import { Prisma } from '@prisma/client';
-import { prisma } from '@/lib/prisma';
+import { NextRequest } from 'next/server';
+
+import { AdminValidationError, writableFields } from '@/lib/admin-database';
 import { isAdminAuthenticated } from '@/lib/admin-session';
-import { writableFields, AdminValidationError } from '@/lib/admin-database';
+import { requireCategoryCanBeRemoved, requirePublishedProductCategory } from '@/lib/catalog-categories';
+import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
 import { resolveVariantSku } from '@/lib/variant-sku';
-import { requireCategoryCanBeRemoved, requirePublishedProductCategory } from '@/lib/catalog-categories';
+
 import type { AdminRecord } from '@/components/admin/adminModels';
 
 function record(value: unknown): AdminRecord {

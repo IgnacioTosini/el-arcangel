@@ -1,8 +1,9 @@
 'use client';
 
-import { Suspense, useEffect, useId, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useId, useState } from 'react';
+
 import './_productSearch.scss';
 
 type Suggestion = { id: string; name: string; href: string; imageUrl: string };
@@ -67,6 +68,7 @@ function SearchWithUrl(props: Props) {
         <div className="productSearchField">
             <input type="search" name="q" maxLength={100} aria-label="Filtrar por nombre o código" placeholder="Filtrar por nombre o código…" value={query} onChange={event => {
                 const next = new URLSearchParams(params.toString());
+                next.delete('pagina');
                 if (event.target.value) next.set('q', event.target.value); else next.delete('q');
                 window.history.replaceState(null, '', `${pathname}${next.size ? `?${next}` : ''}${window.location.hash}`);
             }} />

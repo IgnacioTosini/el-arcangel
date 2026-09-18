@@ -1,5 +1,5 @@
-import { matchesProduct } from '@/lib/product-search';
 import { type CatalogProduct } from '@/data/products';
+import { matchesProduct } from '@/lib/product-search';
 
 export const sortOptions = [
     { value: 'newest', label: 'Más nuevos' },

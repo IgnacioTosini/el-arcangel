@@ -1,10 +1,12 @@
 'use client';
+import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { useAnimation } from '@/lib/use-animation';
+
+import InquiryCallout from './inquiryCallout/InquiryCallout';
 import { animateLocal } from './local.animation';
 
-import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
-import InquiryCallout from './inquiryCallout/InquiryCallout';
 import './_local.scss';
+
 
 export default function Local() {
     const animationRef = useAnimation<HTMLElement>(animateLocal);

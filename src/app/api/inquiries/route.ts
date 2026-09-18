@@ -1,8 +1,9 @@
-import { NextRequest } from 'next/server';
 import { Prisma } from '@prisma/client';
+import { NextRequest } from 'next/server';
+
+import { customerDetailsError } from '@/lib/customer-validation';
 import { prisma } from '@/lib/prisma';
 import { readWholesaleSession, wholesaleCookie } from '@/lib/wholesale-auth';
-import { customerDetailsError } from '@/lib/customer-validation';
 class MinimumOrderError extends Error {}
 export async function POST(req: NextRequest) {
     if (req.headers.get('origin') !== req.nextUrl.origin)

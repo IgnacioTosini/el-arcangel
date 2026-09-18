@@ -1,10 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useAdmin } from '../AdminProvider';
-import DeleteRecordButton from '../DeleteRecordButton';
-import type { AdminRecord } from '../adminModels';
 import CatalogForm from '../catalogForm/CatalogForm';
+import DeleteRecordButton from '../DeleteRecordButton';
+
+import type { AdminRecord } from '../adminModels';
+
 import './_categoryEditor.scss';
 
 export default function CategoryEditor({ category, initiallyOpen = false, onClose }: { category: AdminRecord; initiallyOpen?: boolean; onClose?: () => void }) {

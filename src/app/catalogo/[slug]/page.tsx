@@ -1,11 +1,15 @@
-import { readCustomerCatalog } from '@/lib/customer-catalog';
-import type { Metadata } from 'next';
-import { cache } from 'react';
-import { pageMetadata } from '@/lib/seo';
 import { notFound } from 'next/navigation';
-import { readCatalog } from '@/lib/catalog-database';
-export const dynamic = 'force-dynamic';
+import { cache } from 'react';
+
 import ProductDetail from '@/components/sections/productDetail/ProductDetail';
+import { readCatalog } from '@/lib/catalog-database';
+import { readCustomerCatalog } from '@/lib/customer-catalog';
+import { pageMetadata } from '@/lib/seo';
+
+import type { Metadata } from 'next';
+
+
+export const dynamic = 'force-dynamic';
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
 

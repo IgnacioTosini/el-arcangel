@@ -1,5 +1,7 @@
 import { useId } from 'react';
+
 import type { CustomerDetails } from '../consultationUtils';
+
 import './_customerForm.scss';
 
 type CustomerFormProps = { value: CustomerDetails; wholesale: boolean; onChange: (value: CustomerDetails) => void };

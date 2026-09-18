@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
-import { afterEach, expect, test, vi } from 'vitest';
 import { cleanup, render, waitFor } from '@testing-library/react';
+import { afterEach, expect, test, vi } from 'vitest';
+
 import { useAnimation } from '@/lib/use-animation';
 
 const { revert, add, animate } = vi.hoisted(() => ({ revert: vi.fn(), add: vi.fn(), animate: vi.fn() }));

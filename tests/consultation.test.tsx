@@ -1,14 +1,17 @@
 // @vitest-environment jsdom
-import { afterEach, expect, test, vi } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { afterEach, expect, test, vi } from 'vitest';
+
 import ConsultationProvider from '@/components/providers/ConsultationProvider';
-import Featured from '@/components/sections/featured/Featured';
-import ProductPurchase from '@/components/sections/productDetail/productPurchase/ProductPurchase';
 import Consultation from '@/components/sections/consultation/Consultation';
-import type { CatalogProduct } from '@/data/products';
-import { openWhatsApp } from '@/lib/open-whatsapp';
+import Featured from '@/components/sections/featured/Featured';
 import ProductDetail from '@/components/sections/productDetail/ProductDetail';
+import ProductPurchase from '@/components/sections/productDetail/productPurchase/ProductPurchase';
+import { openWhatsApp } from '@/lib/open-whatsapp';
+
+import type { CatalogProduct } from '@/data/products';
+
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 vi.mock('@/components/ui/consultationToast/ConsultationToast', () => ({ notifyConsultationAdded: vi.fn() }));

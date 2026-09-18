@@ -1,8 +1,9 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { notifyConsultationAdded } from '@/components/ui/consultationToast/ConsultationToast';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+
+import { notifyConsultationAdded } from '@/components/ui/consultationToast/ConsultationToast';
 
 export type ConsultationItem = {
     id: string;

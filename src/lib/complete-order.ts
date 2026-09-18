@@ -1,5 +1,6 @@
-import type { Prisma } from '@prisma/client';
 import { AdminValidationError } from './admin-database';
+
+import type { Prisma } from '@prisma/client';
 
 export async function applyOrderStatus(tx: Prisma.TransactionClient, id: string, data: Record<string, unknown>) {
     const order = await tx.order.findUniqueOrThrow({ where: { id }, include: { items: true } });

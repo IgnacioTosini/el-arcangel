@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { toast, type ToastContentProps } from 'react-toastify';
+
 import './_consultationToast.scss';
 
 type Props = { name: string; quantity: number; onClose: () => void };

@@ -1,10 +1,12 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import type { ReactNode } from 'react';
-import Navbar from './navbar/Navbar';
+
 import Footer from './footer/Footer';
+import Navbar from './navbar/Navbar';
 import RefreshOnReturn from './RefreshOnReturn';
+
+import type { ReactNode } from 'react';
 
 export default function SiteFrame({ children, hasWholesaleSession = false }: { children: ReactNode; hasWholesaleSession?: boolean }) {
     const pathname = usePathname();

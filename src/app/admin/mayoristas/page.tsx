@@ -1,8 +1,10 @@
-import type { Metadata } from 'next';
-import { prisma } from '@/lib/prisma';
-import { isAdminAuthenticated } from '@/lib/admin-session';
 import { redirect } from 'next/navigation';
+
 import WholesaleAccounts from '@/components/admin/wholesaleAccounts/WholesaleAccounts';
+import { isAdminAuthenticated } from '@/lib/admin-session';
+import { prisma } from '@/lib/prisma';
+
+import type { Metadata } from 'next';
 export const metadata: Metadata = { title: 'Cuentas mayoristas | El Arcángel' };
 export default async function Page() {
     if (!await isAdminAuthenticated()) redirect('/login');

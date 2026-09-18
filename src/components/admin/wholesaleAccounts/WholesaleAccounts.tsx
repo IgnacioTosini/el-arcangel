@@ -1,10 +1,15 @@
 'use client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+
+import Pagination from '@/components/ui/pagination/Pagination';
+import { usePagination } from '@/lib/use-pagination';
 import { whatsappLink } from '@/lib/whatsapp-link';
+
 import DeleteRecordButton from '../DeleteRecordButton';
+
 import './_wholesaleAccounts.scss';
 type Account = { id: string; name: string; email: string; phone: string; business: string; status: string; createdAt: string; orderCount: number };
 const statuses = { PENDING: 'Pendiente', APPROVED: 'Activa · Aprobada', REJECTED: 'Inactiva · Rechazada' };
@@ -49,7 +54,8 @@ export default function WholesaleAccounts({ accounts }: { accounts: Account[] })
     }
     const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
     const shown = accounts.filter(account => (!filter || account.status === filter) && normalize(`${account.name} ${account.business} ${account.email} ${account.phone}`).includes(normalize(query)));
-    return <section className="wholesaleAccounts">
+    const pagination = usePagination(shown, JSON.stringify([filter, query]));
+    return <section id="wholesale-results" className="wholesaleAccounts">
         <h1>Cuentas mayoristas</h1>
         <p className="adminMuted">Revisá los datos antes de aprobar. El cliente puede consultar el estado iniciando sesión; no se envían emails automáticos.</p>
         <p className="adminMuted">Solo las cuentas activas y aprobadas acceden a precios mayoristas. Las pendientes y rechazadas no tienen ese acceso.</p>
@@ -62,7 +68,7 @@ export default function WholesaleAccounts({ accounts }: { accounts: Account[] })
             {(query || filter) && <button type="button" className="adminButton" onClick={() => { setQuery(''); setFilter(''); }}>Limpiar filtros</button>}
         </div>
         <p className="adminMuted" role="status">{shown.length} de {accounts.length} cuentas</p>
-        {shown.map(account => <article key={account.id}>
+        {pagination.items.map(account => <article key={account.id}>
             <div className="wholesaleAccountHeading"><h2>{account.name}</h2><span className={`wholesaleStatus wholesaleStatus${account.status}`}>{statuses[account.status as keyof typeof statuses]}</span></div>
             <p>{account.business}</p><p><a href={`mailto:${account.email}`}>{account.email}</a> · <a href={`tel:${account.phone}`}>{account.phone}</a></p>
             <p className="adminMuted">Registrada el {new Intl.DateTimeFormat('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }).format(new Date(account.createdAt))}</p>
@@ -73,5 +79,6 @@ export default function WholesaleAccounts({ accounts }: { accounts: Account[] })
             {change?.account.id === account.id && <div className="wholesaleConfirmation"><p>{change.status === 'APPROVED' ? 'Esta cuenta tendrá acceso a los precios y pedidos mayoristas.' : 'Esta cuenta no tendrá acceso mayorista. Sus consultas anteriores se conservarán.'}</p><button className="adminButton adminButtonPrimary" type="button" disabled={busy} onClick={() => void update(account.id, change.status)}>{busy ? 'Guardando…' : 'Confirmar cambio'}</button><button className="adminButton" type="button" disabled={busy} onClick={() => setChange(null)}>Cancelar</button></div>}
         </article>)}
         {!shown.length && <p className="adminMuted">No hay solicitudes con este estado.</p>}
+        <Pagination {...pagination} targetId="wholesale-results" onChange={page => { if (busy || change) { toast.info('Confirmá o cancelá el cambio de estado antes de cambiar de página.'); return false; } pagination.setPage(page); }} />
     </section>;
 }

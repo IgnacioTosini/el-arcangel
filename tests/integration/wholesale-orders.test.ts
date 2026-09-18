@@ -1,12 +1,14 @@
 import 'dotenv/config';
-import { expect, test, vi } from 'vitest';
 import { randomUUID } from 'node:crypto';
+
 import { NextRequest } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { readCatalog } from '@/lib/catalog-database';
-import { createWholesaleSession, wholesaleCookie } from '@/lib/wholesale-auth';
+import { expect, test, vi } from 'vitest';
+
 import { POST } from '@/app/api/inquiries/route';
 import { PATCH } from '@/app/api/settings/route';
+import { readCatalog } from '@/lib/catalog-database';
+import { prisma } from '@/lib/prisma';
+import { createWholesaleSession, wholesaleCookie } from '@/lib/wholesale-auth';
 vi.mock('@/lib/admin-session', () => ({ isAdminAuthenticated: async () => true }));
 
 test('Solo las cuentas aprobadas consultan con precios mayoristas del servidor', async () => {

@@ -1,7 +1,9 @@
 'use client';
 
-import { useId, useState, type ReactNode } from 'react';
+import { type ReactNode, useId, useState } from 'react';
+
 import type { AdminRecord } from '../adminModels';
+
 import './_inlineFields.scss';
 
 export type InlineField = { name: string; label: string; type?: 'text' | 'number' | 'checkbox' | 'textarea'; optional?: boolean; step?: string; full?: boolean; placeholder?: string };

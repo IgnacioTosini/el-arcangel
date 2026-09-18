@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server';
-import { prisma } from '@/lib/prisma';
+
 import { isAdminAuthenticated } from '@/lib/admin-session';
 import { validateHomeContent } from '@/lib/home-content';
+import { prisma } from '@/lib/prisma';
 export async function GET() {
     try {
         return Response.json(await prisma.siteSettings.findUnique({ where: { id: 'store' } }), { headers: { 'Cache-Control': 'no-store' } });

@@ -1,8 +1,11 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateCategoryCard } from './categoryCard.animation';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateCategoryCard } from './categoryCard.animation';
+
 import './_categoryCard.scss';
 
 export type CategoryCardProps = {

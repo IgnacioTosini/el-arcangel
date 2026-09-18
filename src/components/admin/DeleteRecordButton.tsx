@@ -1,7 +1,9 @@
 'use client';
 
 import { useId, useRef, useState } from 'react';
+
 import Modal from '@/components/ui/modal/Modal';
+
 import './_deleteRecordButton.scss';
 
 export default function DeleteRecordButton({ label, recordName, description = 'El registro se quitará del sitio.', onDelete }: { label: string; recordName?: string; description?: string; onDelete: () => Promise<string | null> }) {

@@ -1,12 +1,16 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateProductDetail } from './productDetail.animation';
-import { useState } from 'react';
 import Link from 'next/link';
+import { useState } from 'react';
+
 import ProductPrice from '@/components/ui/productPrice/ProductPrice';
-import type { CatalogProduct } from '@/data/products';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateProductDetail } from './productDetail.animation';
 import ProductGallery from './productGallery/ProductGallery';
 import ProductPurchase from './productPurchase/ProductPurchase';
+
+import type { CatalogProduct } from '@/data/products';
+
 import './_productDetail.scss';
 
 export default function ProductDetail({ product, purchaseType = 'RETAIL' }: { product: CatalogProduct; purchaseType?: 'RETAIL' | 'WHOLESALE' }) {

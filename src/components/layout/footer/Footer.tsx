@@ -1,9 +1,12 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateFooter } from './footer.animation';
 import Link from 'next/link';
+
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { readHomeContent } from '@/lib/home-content';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateFooter } from './footer.animation';
+
 import './_footer.scss';
 
 export default function Footer() {

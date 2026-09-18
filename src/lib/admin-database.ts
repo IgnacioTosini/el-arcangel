@@ -1,6 +1,8 @@
+import { type AdminData, adminModels, type AdminRecord, type ModelName } from '@/components/admin/adminModels';
+
 import { prisma } from './prisma';
+
 import type { Prisma } from '@prisma/client';
-import { adminModels, type AdminData, type AdminRecord, type ModelName } from '@/components/admin/adminModels';
 export class AdminValidationError extends Error {
 }
 // Adapta relaciones, importes Decimal y fechas al formato de los formularios.

@@ -1,10 +1,13 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateWholesaleAccount } from './wholesaleAccount.animation';
-import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { type FormEvent, useState } from 'react';
+
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
+import { useAnimation } from '@/lib/use-animation';
 import { whatsappLink } from '@/lib/whatsapp-link';
+
+import { animateWholesaleAccount } from './wholesaleAccount.animation';
+
 import './_wholesaleAccount.scss';
 
 type Account = { name: string; business: string; status: 'PENDING' | 'APPROVED' | 'REJECTED' };

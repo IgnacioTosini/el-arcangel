@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import './_inquiryCallout.scss';
 
 export default function InquiryCallout() {

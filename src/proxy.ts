@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+
 import { verifyAdminSessionToken } from '@/lib/admin-session';
+
+import type { NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
     const adminCookie = request.cookies.get('admin-session');

@@ -1,8 +1,9 @@
 'use client';
 
-import { defaultHomeContent } from '@/lib/home-content';
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+
+import { defaultHomeContent } from '@/lib/home-content';
 
 export const defaultSiteSettings = { homeContent: defaultHomeContent, wholesaleMinimumUnits: 2, wholesaleMinimum: '0', name:'El Arcángel', whatsapp:'', instagram:'https://www.instagram.com/elarcangelelarcangel/', address:'', hours:'', wholesaleText:'Venta por mayor y menor. Las condiciones mayoristas (cantidades, precios y entregas) se confirman por consulta.' };
 type SiteSettings = typeof defaultSiteSettings;

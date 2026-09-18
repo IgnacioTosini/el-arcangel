@@ -1,11 +1,15 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateConsultationItem } from './consultationItem.animation';
 
 import Image from 'next/image';
 import Link from 'next/link';
 import { useId, useState } from 'react';
-import { formatAmount, type ConsultationLine } from '../consultationUtils';
+
+import { useAnimation } from '@/lib/use-animation';
+
+import { type ConsultationLine, formatAmount } from '../consultationUtils';
+
+import { animateConsultationItem } from './consultationItem.animation';
+
 import './_consultationItem.scss';
 
 type ConsultationItemProps = ConsultationLine & { onQuantityChange: (quantity: number) => void; onRemove: () => void };

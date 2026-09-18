@@ -1,18 +1,22 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateConsultation } from './consultation.animation';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+
 import { useConsultation } from '@/components/providers/ConsultationProvider';
-import type { CatalogProduct } from '@/data/products';
+import { customerDetailsError } from '@/lib/customer-validation';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateConsultation } from './consultation.animation';
 import ConsultationItem from './consultationItem/ConsultationItem';
+import { buildMessage, type CustomerDetails, formatAmount, getEstimate } from './consultationUtils';
 import CustomerForm from './customerForm/CustomerForm';
 import MessagePreview from './messagePreview/MessagePreview';
-import { buildMessage, formatAmount, getEstimate, type CustomerDetails } from './consultationUtils';
+
+import type { CatalogProduct } from '@/data/products';
+
 import './_consultation.scss';
-import { customerDetailsError } from '@/lib/customer-validation';
 
 export default function Consultation({ products: catalogProducts, purchaseType = 'RETAIL', account, wholesaleMinimum = 0, wholesaleMinimumUnits = 2 }: { products: CatalogProduct[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; account?: { name: string; business: string; phone?: string } | null; wholesaleMinimum?: number; wholesaleMinimumUnits?: number }) {
     const animationRef = useAnimation<HTMLDivElement>(animateConsultation);

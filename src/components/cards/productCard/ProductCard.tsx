@@ -1,11 +1,14 @@
 'use client';
-import { useAnimation } from '@/lib/use-animation';
-import { animateProductCard } from './productCard.animation';
 
 import Image from 'next/image';
-import ProductPrice from '@/components/ui/productPrice/ProductPrice';
 import Link from 'next/link';
+
 import { useConsultation } from '@/components/providers/ConsultationProvider';
+import ProductPrice from '@/components/ui/productPrice/ProductPrice';
+import { useAnimation } from '@/lib/use-animation';
+
+import { animateProductCard } from './productCard.animation';
+
 import './_productCard.scss';
 
 export type ProductCardData = {

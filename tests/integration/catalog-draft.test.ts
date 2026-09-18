@@ -1,8 +1,12 @@
-import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import type { AdminData } from '@/components/admin/adminModels';
+
+import { test } from 'vitest';
+
 import { integrationContext } from './helpers';
+
+import type { AdminData } from '@/components/admin/adminModels';
+
 
 const { db, origin, cookie } = await integrationContext();
 const owned: { products: string[]; categories: string[] } = { products: [], categories: [] };

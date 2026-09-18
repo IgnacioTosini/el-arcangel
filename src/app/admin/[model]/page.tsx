@@ -1,8 +1,10 @@
-import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { adminSections } from '@/components/admin/adminNavigation';
+import { Suspense } from 'react';
+
 import AdminManagement from '@/components/admin/adminManagement/AdminManagement';
+import { adminSections } from '@/components/admin/adminNavigation';
+
+import type { Metadata } from 'next';
 
 export function generateStaticParams() { return adminSections.map(model => ({ model: model.slug })); }
 
