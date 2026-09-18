@@ -6,7 +6,7 @@ import { useConsultation } from '@/components/providers/ConsultationProvider';
 import { openWhatsApp } from '@/lib/open-whatsapp';
 import './_messagePreview.scss';
 
-export default function MessagePreview({ message, onSubmit, blocked = false }: { message: string; onSubmit: () => Promise<string>; blocked?: boolean }) {
+export default function MessagePreview({ message, onSubmit, blocked = false, blockedReason }: { message: string; onSubmit: () => Promise<string>; blocked?: boolean; blockedReason?: string }) {
     const { settings } = useSiteSettings();
     const whatsappReady = /^\d{8,15}$/.test(settings.whatsapp);
     const [saving, setSaving] = useState(false);
@@ -45,6 +45,7 @@ export default function MessagePreview({ message, onSubmit, blocked = false }: {
             <h2>Mensaje a enviar</h2>
             <pre ref={messageRef} tabIndex={0}>{message}</pre>
             <p className="messagePreviewNote">Completá tu nombre y teléfono. Al continuar, guardamos tu consulta para que el local pueda responderte y vaciamos tu lista. WhatsApp se abrirá en una nueva pestaña con el mensaje preparado: presioná Enviar allí para terminar.</p>
+            {blockedReason && <p className="consultationWarning" role="status">{blockedReason}</p>}
             <div className="messagePreviewButtons"><button type="button" className="consultationButton consultationButtonPrimary" disabled={saving || !whatsappReady || blocked} onClick={sendInquiry}>{saving ? 'Preparando consulta…' : 'Continuar por WhatsApp'}</button>
                 <button type="button" className="consultationButton" onClick={copyMessage}>Copiar mensaje</button>
             </div>

@@ -26,8 +26,8 @@ export async function readWholesaleSession(token?: string) {
     if (!token || !/^[a-f0-9]{64}$/.test(token)) return null;
     const session = await prisma.wholesaleSession.findUnique({ where: { tokenHash: tokenHash(token) }, include: { account: true } });
     if (!session || session.expiresAt.getTime() <= Date.now()) return null;
-    const { id, name, business, email, status } = session.account;
-    return { id, name, business, email, status };
+    const { id, name, business, email, phone, status } = session.account;
+    return { id, name, business, email, phone, status };
 }
 export async function getWholesaleAccount() {
     const { cookies } = await import('next/headers');

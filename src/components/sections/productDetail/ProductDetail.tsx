@@ -1,3 +1,5 @@
+'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import ProductPrice from '@/components/ui/productPrice/ProductPrice';
 import type { CatalogProduct } from '@/data/products';
@@ -6,7 +8,9 @@ import ProductPurchase from './productPurchase/ProductPurchase';
 import './_productDetail.scss';
 
 export default function ProductDetail({ product, purchaseType = 'RETAIL' }: { product: CatalogProduct; purchaseType?: 'RETAIL' | 'WHOLESALE' }) {
-
+    const [variantId, setVariantId] = useState(product.defaultVariantId ?? product.variants?.[0]?.id ?? '');
+    const variant = product.variants?.find(item => item.id === variantId);
+    const selectedAvailability = variant ? variant.stock === 0 ? 'unavailable' : variant.stock == null ? 'inquiry' : 'available' : product.availability;
     const availability = { available: 'Disponible', unavailable: 'Agotado', inquiry: 'Consultar disponibilidad' };
     return (
         <div className="productDetailContent">
@@ -23,12 +27,12 @@ export default function ProductDetail({ product, purchaseType = 'RETAIL' }: { pr
                     <p className="productDetailCategory">{product.category}</p>
                     <h1 id="productDetailTitle">{product.name}</h1>
                     <p>{purchaseType === 'WHOLESALE' ? 'Precios mayoristas' : 'Precios minoristas'}</p>
-                    <p className="productDetailPrice"><ProductPrice price={product.price} compareAtPrice={product.compareAtPrice} priceFrom={product.priceFrom} /></p>
-                    <span className="productDetailAvailability">{availability[product.availability]}</span>
+                    <p className="productDetailPrice"><ProductPrice price={variant ? variant.price : product.price} compareAtPrice={variant ? variant.compareAtPrice : product.compareAtPrice} /></p>
+                    <span className="productDetailAvailability">{availability[selectedAvailability]}</span>
                     <p className="productDetailDescription">{product.description ?? `Conocé ${product.name}. Consultanos por sus características y disponibilidad.`}</p>
-                    <ProductPurchase product={product} />
+                    <ProductPurchase product={product} selectedVariantId={variantId} onVariantChange={setVariantId} />
                     <div className="productDetailNote">
-                        <p>Código: {product.sku}</p>
+                        <p>Código: {variant?.sku ?? product.sku}</p>
                         <p>Precios y disponibilidad a confirmar al responder tu consulta.</p>
                         <Link href="/mayoristas">¿Comprás para tu negocio? Conocé la venta por mayor →</Link>
                     </div>

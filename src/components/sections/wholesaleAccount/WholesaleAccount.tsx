@@ -1,11 +1,15 @@
 'use client';
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
+import { whatsappLink } from '@/lib/whatsapp-link';
 import './_wholesaleAccount.scss';
 
 type Account = { name: string; business: string; status: 'PENDING' | 'APPROVED' | 'REJECTED' };
 export default function WholesaleAccount({ account }: { account: Account | null }) {
     const router = useRouter();
+    const { settings } = useSiteSettings();
+    const [request, setRequest] = useState<{ name: string; business: string; email: string } | null>(null);
     const [register, setRegister] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
@@ -14,12 +18,13 @@ export default function WholesaleAccount({ account }: { account: Account | null 
         event.preventDefault();
         if (busy) return;
         const form = event.currentTarget;
+        const values = new FormData(form);
         setBusy(true); setError(''); setNotice('');
         try {
-            const response = await fetch('/api/wholesale/account', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), action: register ? 'register' : 'login' }) });
+            const response = await fetch('/api/wholesale/account', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...Object.fromEntries(values), action: register ? 'register' : 'login' }) });
             const data = await response.json();
             if (!response.ok) throw new Error(data.error);
-            if (register) { setNotice(data.message); setRegister(false); form.reset(); }
+            if (register) { setRequest({ name: String(values.get('name')), business: String(values.get('business')), email: String(values.get('email')) }); setNotice(data.message); setRegister(false); form.reset(); }
             else router.refresh();
         } catch (error) { setError(error instanceof Error ? error.message : 'No se pudo ingresar.'); }
         finally { setBusy(false); }
@@ -40,6 +45,7 @@ export default function WholesaleAccount({ account }: { account: Account | null 
         </> : <>
             <p>{register ? 'Completá tus datos y los de tu negocio. El local revisará tu solicitud; podés volver a ingresar para consultar su estado.' : 'Este acceso es exclusivo para mayoristas. Para consultar por menor no necesitás una cuenta.'}</p>
             {notice && <p role="status">{notice}</p>}
+            {request && whatsappLink(settings.whatsapp, '') && <p>Tu solicitud ya está registrada. <a href={whatsappLink(settings.whatsapp, `Hola, soy ${request.name}, del negocio ${request.business}. Registré una solicitud mayorista con el email ${request.email}. Quisiera consultar su aprobación.`)!} target="_blank" rel="noopener noreferrer">Avisar al local por WhatsApp</a>. Se abrirá un mensaje para que lo envíes.</p>}
             <form onSubmit={submit}><fieldset disabled={busy}>
                 {register && <>
                     <label>Nombre y apellido<input name="name" autoComplete="name" required maxLength={120} /></label>

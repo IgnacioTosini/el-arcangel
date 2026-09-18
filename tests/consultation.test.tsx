@@ -8,7 +8,9 @@ import ProductPurchase from '@/components/sections/productDetail/productPurchase
 import Consultation from '@/components/sections/consultation/Consultation';
 import type { CatalogProduct } from '@/data/products';
 import { openWhatsApp } from '@/lib/open-whatsapp';
+import ProductDetail from '@/components/sections/productDetail/ProductDetail';
 
+vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 vi.mock('@/components/ui/consultationToast/ConsultationToast', () => ({ notifyConsultationAdded: vi.fn() }));
 vi.mock('@/components/providers/SiteSettingsProvider', () => ({ useSiteSettings: () => ({ settings: { whatsapp: '5491112345678', instagram: '' } }) }));
 vi.mock('@/lib/open-whatsapp', () => ({ openWhatsApp: vi.fn(async (_phone, _message, beforeOpen) => beforeOpen()) }));
@@ -37,6 +39,8 @@ test('El mínimo de unidades se exige aunque no haya importe mínimo', async () 
     await user.clear(quantity);
     await user.type(quantity, '3');
     await user.tab();
+    await user.type(screen.getByLabelText('Tu nombre'), 'Cliente');
+    await user.type(screen.getByLabelText('Teléfono de contacto'), '2235551234');
     expect(button.disabled).toBe(false);
 });
 
@@ -58,6 +62,8 @@ test('Una lista recuperada con stock reducido bloquea el envío hasta corregir l
     expect(screen.getByRole('alert').textContent).toContain('El stock cambió');
     const quantity = screen.getByRole('spinbutton', { name: 'Cantidad de Set sahumerios | Natural' });
     await user.clear(quantity); await user.type(quantity, '2'); await user.tab();
+    await user.type(screen.getByLabelText('Tu nombre'), 'Cliente');
+    await user.type(screen.getByLabelText('Teléfono de contacto'), '2235551234');
     expect(button.disabled).toBe(false);
 });
 
@@ -71,6 +77,8 @@ test('Una lista mixta conserva los artículos válidos y avisa que el subtotal e
     const button = screen.getByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement;
     expect(button.disabled).toBe(true);
     await user.click(screen.getByRole('button', { name: 'Quitar Artículo anterior' }));
+    await user.type(screen.getByLabelText('Tu nombre'), 'Cliente');
+    await user.type(screen.getByLabelText('Teléfono de contacto'), '2235551234');
     expect(button.disabled).toBe(false);
     expect(screen.getByRole('heading', { name: 'Set sahumerios | Natural' })).toBeTruthy();
 });
@@ -98,6 +106,8 @@ test('El mínimo mayorista bloquea el envío hasta alcanzar el importe exacto', 
     await user.clear(quantity);
     await user.type(quantity, '2');
     await user.tab();
+    await user.type(screen.getByLabelText('Tu nombre'), 'Cliente');
+    await user.type(screen.getByLabelText('Teléfono de contacto'), '2235551234');
     expect(button.disabled).toBe(false);
     expect(screen.getByText(/Tu pedido alcanza el mínimo/)).toBeTruthy();
 });
@@ -179,6 +189,8 @@ test('Solo abre WhatsApp y vacía la lista después de guardar; un error permite
     vi.stubGlobal('fetch', fetchMock);
     const user = setup();
     await user.click(screen.getByRole('button', { name: 'Agregar Set sahumerios a mi consulta' }));
+    await user.type(screen.getByLabelText('Tu nombre'), 'Cliente');
+    await user.type(screen.getByLabelText('Teléfono de contacto'), '2235551234');
     await user.click(screen.getByRole('button', { name: 'Continuar por WhatsApp' }));
     expect(await screen.findByText('No se pudo guardar')).toBeTruthy();
     expect(openWhatsApp).toHaveBeenCalledTimes(1);
@@ -190,4 +202,38 @@ test('Solo abre WhatsApp y vacía la lista después de guardar; un error permite
     cleanup();
     setup();
     expect(screen.getByRole('heading', { name: 'Tu consulta está vacía' })).toBeTruthy();
+});
+
+test('sin teléfono no abre WhatsApp ni envía solicitudes; el mayorista usa su teléfono guardado', async () => {
+    vi.mocked(openWhatsApp).mockClear();
+    localStorage.setItem('el-arcangel:consultation:v1', JSON.stringify({ items: [{ id: 'variant-1', name: product.name, quantity: 2 }] }));
+    const view = render(<ConsultationProvider><Consultation products={[product]} /></ConsultationProvider>);
+    const user = userEvent.setup();
+    await user.type(screen.getByLabelText('Tu nombre'), 'María');
+    expect((screen.getByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.getByText(/Completá un teléfono de contacto válido/)).toBeTruthy();
+    expect(openWhatsApp).not.toHaveBeenCalled();
+    view.unmount();
+    render(<ConsultationProvider><Consultation products={[product]} purchaseType="WHOLESALE" account={{ name: 'María', business: 'Local', phone: '+54 9 223 5551234' }} /></ConsultationProvider>);
+    expect((screen.getByLabelText('Teléfono de contacto') as HTMLInputElement).value).toBe('+54 9 223 5551234');
+    expect((screen.getByRole('button', { name: 'Continuar por WhatsApp' }) as HTMLButtonElement).disabled).toBe(false);
+});
+
+test('detalle cambia el precio principal, descuento y SKU con la variante elegida', async () => {
+    const discounted = { ...product, variants: [product.variants![0], { ...product.variants![1], price: 5000, compareAtPrice: 7000 }] };
+    render(<ConsultationProvider><ProductDetail product={discounted} /></ConsultationProvider>);
+    expect(screen.queryByLabelText(/Precio anterior/)).toBeNull();
+    await userEvent.setup().selectOptions(screen.getByRole('combobox', { name: 'Variante' }), 'variant-2');
+    expect(screen.getByLabelText(/Precio anterior/).tagName).toBe('DEL');
+    expect(screen.getByText('Código: DEST-003')).toBeTruthy();
+});
+
+test('la tarjeta muestra el descuento y limita el stock de la misma variante que agrega', async () => {
+    const discounted = { ...product, defaultVariantId: 'variant-2', variants: [product.variants![0], { ...product.variants![1], stock: 1, price: 5000, compareAtPrice: 7000 }] };
+    render(<ConsultationProvider><Featured products={[discounted]} /><Consultation products={[discounted]} /></ConsultationProvider>);
+    expect(screen.getByLabelText(/Precio anterior/).tagName).toBe('DEL');
+    const button = screen.getByRole('button', { name: 'Agregar Set sahumerios a mi consulta' }) as HTMLButtonElement;
+    await userEvent.setup().click(button);
+    expect(button.disabled).toBe(true);
+    expect((screen.getByRole('spinbutton', { name: 'Cantidad de Set sahumerios | Lavanda' }) as HTMLInputElement).value).toBe('1');
 });

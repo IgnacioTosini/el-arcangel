@@ -2,6 +2,18 @@ import { NextRequest } from 'next/server';
 import { isAdminAuthenticated } from '@/lib/admin-session';
 import { prisma } from '@/lib/prisma';
 
+export async function DELETE(req: NextRequest) {
+    if (!await isAdminAuthenticated()) return Response.json({ error: 'Ingresá al administrador.' }, { status: 401 });
+    if (req.headers.get('origin') !== req.nextUrl.origin) return Response.json({ error: 'Origen no permitido.' }, { status: 403 });
+    try {
+        const { id } = await req.json();
+        if (typeof id !== 'string' || !id.trim()) return Response.json({ error: 'Cuenta inválida.' }, { status: 400 });
+        // Foreign keys delete sessions and preserve orders with a null account reference.
+        await prisma.wholesaleAccount.deleteMany({ where: { id } });
+        return Response.json({ ok: true });
+    } catch { return Response.json({ error: 'No se pudo eliminar la cuenta.' }, { status: 400 }); }
+}
+
 export async function PATCH(req: NextRequest) {
     if (!await isAdminAuthenticated()) return Response.json({ error: 'Ingresá al administrador.' }, { status: 401 });
     if (req.headers.get('origin') !== req.nextUrl.origin) return Response.json({ error: 'Origen no permitido.' }, { status: 403 });

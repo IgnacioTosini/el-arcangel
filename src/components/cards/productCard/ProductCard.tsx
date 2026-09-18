@@ -18,6 +18,7 @@ export type ProductCardData = {
     price: number | null;
     compareAtPrice?: number | null;
     priceFrom?: boolean;
+    variants?: { id: string; name: string; sku: string; price: number | null; compareAtPrice?: number | null; stock: number | null }[];
     availability: 'available' | 'unavailable' | 'inquiry';
 };
 
@@ -32,7 +33,9 @@ const availabilityLabels = {
     inquiry: 'Consultar disponibilidad',
 };
 
-export default function ProductCard({ product, onAdd }: ProductCardProps) {
+export default function ProductCard({ product: source, onAdd }: ProductCardProps) {
+    const variant = source.variants?.find(item => item.id === source.defaultVariantId);
+    const product: ProductCardData = variant ? { ...source, price: variant.price, compareAtPrice: variant.compareAtPrice, stock: variant.stock, defaultVariantName: variant.name, priceFrom: false, availability: variant.stock === 0 ? 'unavailable' : variant.stock == null ? 'inquiry' : 'available' } : source;
     const { items } = useConsultation();
     const inCart = items.find(item => item.id === product.defaultVariantId)?.quantity ?? 0;
     const atLimit = inCart >= Math.min(999, product.stock ?? 999);

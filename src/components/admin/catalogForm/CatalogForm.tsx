@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import { useAdmin } from '../AdminProvider';
 import type { AdminRecord } from '../adminModels';
 import DraftFields from '../draftFields/DraftFields';
 import CategorySelect from '../categorySelect/CategorySelect';
 import DraftImage from '../draftImage/DraftImage';
-import { ImageService, type UploadedImage } from '@/services/ImageService';
+import { ImageService } from '@/services/ImageService';
+import { useDraftImages } from '../draftImage/useDraftImages';
 import { slugify } from '@/lib/slug';
 import { sortProductImages } from '@/lib/product-images';
 import './_catalogForm.scss';
@@ -24,7 +25,7 @@ export default function CatalogForm({ model, initial, onClose }: Props) {
     const [error, setError] = useState('');
     const [confirmCancel, setConfirmCancel] = useState(false);
     const [baseline] = useState(() => JSON.stringify({ draft: initial, variants, images }));
-    const uploads = useRef(new Set<string>());
+    const { uploads, track, resolve } = useDraftImages(model === 'Product' ? 'productos' : 'categorias');
     const isNew = initial.id.startsWith('draft-');
     const dirty = isNew || baseline !== JSON.stringify({ draft, variants, images });
     const product = model === 'Product';
@@ -63,10 +64,6 @@ export default function CatalogForm({ model, initial, onClose }: Props) {
         onClose();
     }
 
-    function track(image: UploadedImage | null) {
-        if (image) uploads.current.add(image.public_id);
-    }
-
     async function submit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         if (busy) return;
@@ -76,10 +73,20 @@ export default function CatalogForm({ model, initial, onClose }: Props) {
         }
         setBusy(true); setError('');
         try {
-            const response = await fetch('/api/admin/catalog', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model, record: draft, variants, images }) });
+            const savedImages = [];
+            for (const image of images) {
+                const uploaded = await resolve(String(image.url), String(image.publicId ?? ''));
+                savedImages.push({ ...image, url: uploaded.url, publicId: uploaded.public_id });
+            }
+            let record = draft;
+            if (!product && draft.imageUrl) {
+                const uploaded = await resolve(String(draft.imageUrl), String(draft.publicId ?? ''));
+                record = { ...draft, imageUrl: uploaded.url, publicId: uploaded.public_id };
+            }
+            const response = await fetch('/api/admin/catalog', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model, record, variants, images: savedImages }) });
             const result = await response.json();
             if (!response.ok) throw new Error(result.error);
-            const used = new Set(product ? images.map(image => String(image.publicId)) : [String(draft.publicId ?? '')]);
+            const used = new Set(product ? savedImages.map(image => String(image.publicId)) : [String(record.publicId ?? '')]);
             await cleanup([...result.cleanup, ...[...uploads.current].filter(id => !used.has(id))]);
             uploads.current.clear();
             try { await refreshData(); } catch { toast.warning('Guardado correctamente. Actualizá el panel para ver los datos nuevos.'); }

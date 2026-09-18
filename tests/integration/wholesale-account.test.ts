@@ -4,8 +4,8 @@ import { NextRequest } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { prisma } from '@/lib/prisma';
 import { POST, DELETE } from '@/app/api/wholesale/account/route';
-import { PATCH } from '@/app/api/admin/wholesale/route';
-import { readWholesaleSession } from '@/lib/wholesale-auth';
+import { PATCH, DELETE as deleteAccount } from '@/app/api/admin/wholesale/route';
+import { createWholesaleSession, readWholesaleSession } from '@/lib/wholesale-auth';
 
 const { auth } = vi.hoisted(() => ({ auth: { allowed: false } }));
 vi.mock('@/lib/admin-session', () => ({ isAdminAuthenticated: async () => auth.allowed }));
@@ -31,6 +31,7 @@ test('Solicitud, login, aprobación administrativa, revocación y cierre de sesi
         expect(login.headers.get('set-cookie')).toContain('HttpOnly');
         const token = cookie.split('=')[1];
         expect((await readWholesaleSession(token))?.status).toBe('PENDING');
+        expect((await readWholesaleSession(token))?.phone).toBe(registration.phone);
         expect(await readWholesaleSession('a'.repeat(64))).toBeNull();
         const change = { id: account.id, status: 'APPROVED' };
         expect((await PATCH(request('/api/admin/wholesale', 'PATCH', change))).status).toBe(401);
@@ -45,5 +46,32 @@ test('Solicitud, login, aprobación administrativa, revocación y cierre de sesi
         await prisma.wholesaleAccount.deleteMany({ where: { email } });
         await prisma.$disconnect();
         auth.allowed = false;
+    }
+});
+
+test('Eliminar requiere administrador y mismo origen, revoca sesiones y conserva consultas', async () => {
+    if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(process.env.DATABASE_URL ?? '').hostname)) throw new Error('Se requiere base local.');
+    const email = `delete-${randomUUID()}@example.com`;
+    const account = await prisma.wholesaleAccount.create({ data: { name: 'Prueba', business: 'Negocio', phone: '2235551234', email, passwordHash: 'unused', status: 'APPROVED' } });
+    let orderId: string | undefined;
+    try {
+        const token = await createWholesaleSession(account.id);
+        const order = await prisma.order.create({ data: { wholesaleAccountId: account.id, idempotencyKey: randomUUID(), customerName: 'Prueba', customerPhone: '2235551234', purchaseType: 'WHOLESALE' } });
+        orderId = order.id;
+        auth.allowed = false;
+        expect((await deleteAccount(request('/api/admin/wholesale', 'DELETE', { id: account.id }))).status).toBe(401);
+        auth.allowed = true;
+        expect((await deleteAccount(new NextRequest(origin + '/api/admin/wholesale', { method: 'DELETE', headers: { Origin: 'https://other.example' }, body: JSON.stringify({ id: account.id }) }))).status).toBe(403);
+        expect((await deleteAccount(request('/api/admin/wholesale', 'DELETE', { id: '' }))).status).toBe(400);
+        expect((await deleteAccount(request('/api/admin/wholesale', 'DELETE', { id: account.id }))).status).toBe(200);
+        expect(await prisma.wholesaleAccount.findUnique({ where: { id: account.id } })).toBeNull();
+        expect(await readWholesaleSession(token)).toBeNull();
+        expect(await prisma.wholesaleSession.count({ where: { accountId: account.id } })).toBe(0);
+        expect(await prisma.order.findUnique({ where: { id: order.id } })).toMatchObject({ wholesaleAccountId: null, customerName: 'Prueba', purchaseType: 'WHOLESALE' });
+    } finally {
+        if (orderId) await prisma.order.deleteMany({ where: { id: orderId } });
+        await prisma.wholesaleAccount.deleteMany({ where: { id: account.id } });
+        auth.allowed = false;
+        await prisma.$disconnect();
     }
 });

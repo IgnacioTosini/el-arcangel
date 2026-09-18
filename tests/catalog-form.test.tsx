@@ -4,6 +4,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CatalogForm from '@/components/admin/catalogForm/CatalogForm';
 import type { AdminRecord } from '@/components/admin/adminModels';
+import { ImageService } from '@/services/ImageService';
 
 const { refreshData } = vi.hoisted(() => ({ refreshData: vi.fn() }));
 vi.mock('@/components/admin/AdminProvider', () => ({ useAdmin: () => ({
@@ -74,4 +75,27 @@ test('Editar un producto y seleccionar categorías mantiene los cambios en el bo
     expect(screen.getByRole('button', { name: /1 seleccionada/ })).toBeTruthy();
     expect((screen.getByLabelText('Dirección web (slug)') as HTMLInputElement).value).toBe('buda-decorativo');
     expect(fetch).not.toHaveBeenCalled();
+});
+
+test('seleccionar una imagen no la sube hasta guardar y un reintento reutiliza la subida', async () => {
+    URL.createObjectURL = vi.fn(() => 'blob:category-preview');
+    URL.revokeObjectURL = vi.fn();
+    const upload = vi.spyOn(ImageService, 'uploadImage').mockResolvedValue({ success: true, url: 'https://res.cloudinary.com/demo/new.jpg', public_id: 'categories/new' });
+    const remove = vi.spyOn(ImageService, 'deleteImage').mockResolvedValue({ success: true });
+    vi.mocked(fetch).mockResolvedValueOnce(new Response(JSON.stringify({ error: 'Error de guardado' }), { status: 400 }))
+        .mockResolvedValueOnce(new Response(JSON.stringify({ id: 'saved', cleanup: ['categories/old'] }), { status: 200 }));
+    const user = userEvent.setup();
+    render(<CatalogForm model="Category" initial={{ ...initial, name: 'Aromas', slug: 'aromas', imageUrl: 'https://res.cloudinary.com/demo/old.jpg', publicId: 'categories/old' }} onClose={vi.fn()} />);
+    await user.upload(screen.getByLabelText('Reemplazar imagen'), new File(['image'], 'photo.jpg', { type: 'image/jpeg' }));
+    expect(upload).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));
+    expect(await screen.findByRole('alert')).toBeTruthy();
+    expect(upload).toHaveBeenCalledOnce();
+    expect(remove).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: 'Guardar cambios' }));
+    await waitFor(() => expect(remove).toHaveBeenCalledWith('categories/old'));
+    expect(upload).toHaveBeenCalledOnce();
+    expect(JSON.parse(String(vi.mocked(fetch).mock.calls[1][1]?.body)).record.imageUrl).toBe('https://res.cloudinary.com/demo/new.jpg');
+    upload.mockRestore(); remove.mockRestore();
 });

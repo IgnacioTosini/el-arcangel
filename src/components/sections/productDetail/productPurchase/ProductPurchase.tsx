@@ -7,9 +7,10 @@ import { useConsultation } from '@/components/providers/ConsultationProvider';
 import type { CatalogProduct } from '@/data/products';
 import './_productPurchase.scss';
 
-export default function ProductPurchase({ product }: { product: CatalogProduct }) {
+export default function ProductPurchase({ product, selectedVariantId, onVariantChange }: { product: CatalogProduct; selectedVariantId?: string; onVariantChange?: (id: string) => void }) {
     const id = useId();
-    const [variantId, setVariantId] = useState(product.defaultVariantId ?? product.variants?.[0]?.id ?? '');
+    const [localVariantId, setVariantId] = useState(product.defaultVariantId ?? product.variants?.[0]?.id ?? '');
+    const variantId = selectedVariantId ?? localVariantId;
     const variant = product.variants?.find(v => v.id === variantId);
     const unavailable = !variant || variant.stock === 0;
     const [quantity, setQuantity] = useState('1');
@@ -28,8 +29,8 @@ export default function ProductPurchase({ product }: { product: CatalogProduct }
     return (
         <div className="productPurchaseContent">
             <form className="productPurchaseForm" onSubmit={handleSubmit}>
-                {product.variants && <label>Variante<select value={variantId} onChange={event => { setVariantId(event.target.value); setQuantity('1'); }}>{product.variants.map(v => <option key={v.id} value={v.id}>{v.name}{v.stock === 0 ? ' | Agotada' : ''}</option>)}</select></label>}
-                {variant && <p><ProductPrice price={variant.price} compareAtPrice={variant.compareAtPrice} /></p>}
+                {product.variants && <label>Variante<select value={variantId} onChange={event => { setVariantId(event.target.value); onVariantChange?.(event.target.value); setQuantity('1'); }}>{product.variants.map(v => <option key={v.id} value={v.id}>{v.name}{v.stock === 0 ? ' | Agotada' : ''}</option>)}</select></label>}
+                {variant && selectedVariantId === undefined && <p><ProductPrice price={variant.price} compareAtPrice={variant.compareAtPrice} /></p>}
                 <p>{variant?.stock == null ? 'Stock a confirmar' : `${variant.stock} disponibles`}{inCart > 0 ? ` | ${inCart} en tu consulta` : ''}</p>
                 <label htmlFor={id}>Cantidad</label>
                 <input id={id} type="number" min={1} max={remaining} step={1} required value={quantity} onChange={(event) => setQuantity(event.target.value)} disabled={unavailable || remaining === 0} />

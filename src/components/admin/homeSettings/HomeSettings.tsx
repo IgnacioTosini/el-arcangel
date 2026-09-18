@@ -1,7 +1,8 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ImageService, type UploadedImage } from '@/services/ImageService';
+import { ImageService } from '@/services/ImageService';
+import { useDraftImages, type DraftImageValue } from '../draftImage/useDraftImages';
 import DraftImage from '../draftImage/DraftImage';
 import { useSiteSettings } from '@/components/providers/SiteSettingsProvider';
 import { defaultHomeContent, readHomeContent, validateHomeContent } from '@/lib/home-content';
@@ -11,9 +12,9 @@ import '../storeSettings/_storeSettings.scss';
 export default function HomeSettings() {
     const { settings, updateSettings } = useSiteSettings();
     const content = readHomeContent(settings.homeContent);
-    const [image, setImage] = useState<UploadedImage | null | undefined>(undefined);
+    const [image, setImage] = useState<DraftImageValue | null | undefined>(undefined);
     const [uploading, setUploading] = useState(false);
-    const uploads = useRef(new Set<string>());
+    const { uploads, track, resolve, reset } = useDraftImages('home');
     async function cleanup(ids: string[]) {
         for (const id of ids) {
             const result = await ImageService.deleteImage(id);
@@ -24,7 +25,7 @@ export default function HomeSettings() {
     return <section className="storeSettingsContent">
         <h2>Contenido del inicio</h2>
         <p className="adminMuted">Editá los textos y botones de la página principal. Se publican juntos al presionar Guardar cambios. Los productos y las categorías se administran desde sus propias secciones.</p>
-        <div className="storeSettingsForm"><InlineFields saveTogether disabled={uploading} extraDirty={image !== undefined} onCancel={() => { setImage(undefined); void cleanup([...uploads.current]); }} record={{ id: 'home', ...content }} fields={[
+        <div className="storeSettingsForm"><InlineFields saveTogether disabled={uploading} extraDirty={image !== undefined} onCancel={() => { setImage(undefined); reset(); void cleanup([...uploads.current]); }} record={{ id: 'home', ...content }} fields={[
             { name: 'heroImageAlt', label: 'Descripción de la imagen (accesibilidad)', full: true },
             { name: 'heroTitle', label: 'Portada · Título', full: true },
             { name: 'heroSubtitle', label: 'Portada · Subtítulo', full: true },
@@ -41,17 +42,20 @@ export default function HomeSettings() {
             { name: 'aboutButton', label: 'Sobre el local · Botón de Instagram', full: true },
             { name: 'footerDescription', label: 'Footer · Descripción del comercio', type: 'textarea', full: true },
         ]} onSave={async record => {
-            const next = validateHomeContent({ ...record, ...(image !== undefined ? { heroImageUrl: image?.url ?? defaultHomeContent.heroImageUrl, heroImagePublicId: image?.public_id ?? '' } : {}) });
+            validateHomeContent(record);
+            const uploaded = image ? await resolve(image.url, image.public_id) : image;
+            const next = validateHomeContent({ ...record, ...(uploaded !== undefined ? { heroImageUrl: uploaded?.url ?? defaultHomeContent.heroImageUrl, heroImagePublicId: uploaded?.public_id ?? '' } : {}) });
             const error = await updateSettings({ homeContent: next });
             if (error) return error;
             uploads.current.delete(next.heroImagePublicId);
             setImage(undefined);
+            reset();
             await cleanup([...new Set([...uploads.current, ...(content.heroImagePublicId && content.heroImagePublicId !== next.heroImagePublicId ? [content.heroImagePublicId] : [])])]);
             return null;
         }}>
             <h3>Imagen principal</h3>
             <p className="adminMuted">La imagen inicial es una representación del local creada con IA. Podés reemplazarla por una foto real. Quitarla restaura la ilustración inicial.</p>
-            <DraftImage folder="home" url={image === undefined ? content.heroImageUrl : image?.url ?? defaultHomeContent.heroImageUrl} onBusy={setUploading} onChange={next => { if (next) uploads.current.add(next.public_id); setImage(next); }} />
+            <DraftImage folder="home" url={image === undefined ? content.heroImageUrl : image?.url ?? defaultHomeContent.heroImageUrl} onBusy={setUploading} onChange={next => { track(next); setImage(next); }} />
         </InlineFields></div>
     </section>;
 }

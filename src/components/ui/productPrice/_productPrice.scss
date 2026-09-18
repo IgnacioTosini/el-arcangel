@@ -5,5 +5,5 @@
     align-items: baseline;
     flex-wrap: wrap;
     gap: .5rem;
-    del { color: rgba($color-text, .65); font-size: .85em; font-weight: 400; text-decoration-thickness: 1px; }
+    del { color: rgba($color-text, .65); font-size: .85em; font-weight: 400; text-decoration: line-through; text-decoration-thickness: 1px; }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useConsultation } from '@/components/providers/ConsultationProvider';
 import type { CatalogProduct } from '@/data/products';
@@ -9,11 +10,13 @@ import CustomerForm from './customerForm/CustomerForm';
 import MessagePreview from './messagePreview/MessagePreview';
 import { buildMessage, formatAmount, getEstimate, type CustomerDetails } from './consultationUtils';
 import './_consultation.scss';
+import { customerDetailsError } from '@/lib/customer-validation';
 
-export default function Consultation({ products: catalogProducts, purchaseType = 'RETAIL', account, wholesaleMinimum = 0, wholesaleMinimumUnits = 2 }: { products: CatalogProduct[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; account?: { name: string; business: string } | null; wholesaleMinimum?: number; wholesaleMinimumUnits?: number }) {
+export default function Consultation({ products: catalogProducts, purchaseType = 'RETAIL', account, wholesaleMinimum = 0, wholesaleMinimumUnits = 2 }: { products: CatalogProduct[]; purchaseType?: 'RETAIL' | 'WHOLESALE'; account?: { name: string; business: string; phone?: string } | null; wholesaleMinimum?: number; wholesaleMinimumUnits?: number }) {
     const { items, updateQuantity, removeItem, clearItems } = useConsultation();
+    const router = useRouter();
     const submission = useRef({ fingerprint: '', key: '' });
-    const [customer, setCustomer] = useState<CustomerDetails>({ name: account?.name ?? '', phone: '', business: account?.business ?? '', comment: '' });
+    const [customer, setCustomer] = useState<CustomerDetails>({ name: account?.name ?? '', phone: account?.phone ?? '', business: account?.business ?? '', comment: '' });
     const lines = items.flatMap((item) => {
         const product = catalogProducts.find(product => product.variants?.some(v => v.id === item.id));
         const variant = product?.variants?.find(v => v.id === item.id);
@@ -27,14 +30,17 @@ export default function Consultation({ products: catalogProducts, purchaseType =
     const missingUnits = Math.max(0, wholesaleMinimumUnits - units);
     const minimumBlocked = purchaseType === 'WHOLESALE' && (remaining > 0 || missingUnits > 0);
     const message = buildMessage(lines, purchaseType, customer);
+    const blockedReason = unavailableItems.length ? 'Hay artículos que ya no están disponibles. Quitalos de tu consulta para continuar.' : insufficientStock ? 'El stock cambió: reducí las cantidades que superan lo disponible o quitá los artículos agotados para continuar.' : minimumBlocked ? 'Tu consulta todavía no alcanza los mínimos mayoristas indicados arriba.' : customerDetailsError(customer);
     async function submitInquiry() {
+        const error = customerDetailsError(customer);
+        if (error) throw new Error(error);
         if (unavailableItems.length || insufficientStock || minimumBlocked) throw new Error('Revisá los artículos y las cantidades de tu consulta antes de enviarla.');
         const payload = { customer, purchaseType, items: lines.map(line => ({ variantId: line.product.variantId, quantity: line.quantity })) };
         const fingerprint = JSON.stringify(payload);
         if (submission.current.fingerprint !== fingerprint) submission.current = { fingerprint, key: crypto.randomUUID() };
         const response = await fetch('/api/inquiries', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, idempotencyKey: submission.current.key }) });
         const result = await response.json();
-        if (!response.ok) throw new Error(result.error);
+        if (!response.ok) { router.refresh(); throw new Error(result.error); }
         return `Consulta CONS-${String(result.number).padStart(4, '0')} enviada al local.`;
     }
     return (
@@ -72,7 +78,7 @@ export default function Consultation({ products: catalogProducts, purchaseType =
                 {purchaseType === 'WHOLESALE' && <p role="status" className="consultationWarning">Mínimo mayorista: <strong>{wholesaleMinimumUnits} unidades</strong> en total. {missingUnits > 0 ? `Te ${missingUnits === 1 ? 'falta 1 unidad' : `faltan ${missingUnits} unidades`} para enviar tu consulta.` : 'Tu pedido alcanza la cantidad mínima.'}</p>}
                 <div className="consultationColumns">
                     <CustomerForm value={customer} wholesale={purchaseType === 'WHOLESALE'} onChange={setCustomer} />
-                    <MessagePreview message={message} onSubmit={submitInquiry} blocked={minimumBlocked || insufficientStock || unavailableItems.length > 0} />
+                    <MessagePreview message={message} onSubmit={submitInquiry} blocked={Boolean(blockedReason)} blockedReason={blockedReason ?? undefined} />
                 </div>
             </> : <section className="consultationEmpty">
                 <h2>Tu consulta está vacía</h2>

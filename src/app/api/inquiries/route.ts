@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { readWholesaleSession, wholesaleCookie } from '@/lib/wholesale-auth';
+import { customerDetailsError } from '@/lib/customer-validation';
 class MinimumOrderError extends Error {}
 export async function POST(req: NextRequest) {
     if (req.headers.get('origin') !== req.nextUrl.origin)
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
         const purchaseType = account?.status === 'APPROVED' ? 'WHOLESALE' : 'RETAIL';
         if (body.purchaseType !== purchaseType) return Response.json({ error: 'Tu modalidad de compra cambió. Recargá la consulta. Los precios mayoristas requieren una cuenta aprobada.' }, { status: 403 });
         const customer = body.customer;
-        if (!customer || typeof customer.name !== 'string' || !customer.name.trim() || customer.name.length > 120 || typeof customer.phone !== 'string' || !/^[+\d ()-]{8,30}$/.test(customer.phone) || customer.phone.replace(/\D/g, '').length < 8)
+        if (!customer || typeof customer.name !== 'string' || typeof customer.phone !== 'string' || customerDetailsError(customer))
             return Response.json({ error: 'Completá tu nombre y un teléfono de contacto válido.' }, { status: 400 });
         if (typeof customer.business !== 'string' || customer.business.length > 160 || typeof customer.comment !== 'string' || customer.comment.length > 2000 || !['RETAIL', 'WHOLESALE'].includes(body.purchaseType) || typeof body.idempotencyKey !== 'string' || !/^[0-9a-f-]{36}$/.test(body.idempotencyKey))
             throw new Error();

@@ -11,6 +11,9 @@ const accounts = [
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 test('filtra cuentas por estado y nombre y enlaza su historial', () => {
     render(<WholesaleAccounts accounts={accounts} />);
+    expect(screen.getAllByRole('article')).toHaveLength(2);
+    expect((screen.getByLabelText('Estado') as HTMLSelectElement).value).toBe('');
+    fireEvent.change(screen.getByLabelText('Estado'), { target: { value: 'PENDING' } });
     expect(screen.getAllByRole('article')).toHaveLength(1);
     expect(screen.getByRole('link', { name: 'Ver consultas (2)' }).getAttribute('href')).toBe('/admin/pedidos?cuenta=a');
     fireEvent.click(screen.getByRole('button', { name: 'Limpiar filtros' }));
@@ -30,4 +33,7 @@ test('cambiar el estado requiere confirmar y cancelar no envía cambios', async 
     fireEvent.click(screen.getByRole('button', { name: 'Confirmar cambio' }));
     await waitFor(() => expect(request).toHaveBeenCalledOnce());
     expect(JSON.parse(request.mock.calls[0][1].body)).toEqual({ id: 'a', status: 'APPROVED' });
+    const link = await screen.findByRole('link', { name: 'Avisar a María por WhatsApp' });
+    expect(link.getAttribute('target')).toBe('_blank');
+    expect(decodeURIComponent(link.getAttribute('href')!)).toContain('Tu cuenta mayorista fue aprobada');
 });

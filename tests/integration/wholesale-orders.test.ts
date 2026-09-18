@@ -53,6 +53,7 @@ test('Solo las cuentas aprobadas consultan con precios mayoristas del servidor',
         expect(order.businessName).toBe('Business');
         expect(order.estimatedTotal?.toNumber()).toBe(120);
         expect(order.items[0].unitPrice?.toNumber()).toBe(60);
+        expect((await prisma.productVariant.findUniqueOrThrow({ where: { id: variantId } })).stock).toBe(10);
         await prisma.siteSettings.update({ where: { id: 'store' }, data: { wholesaleMinimumUnits: 3 } });
         expect((await submit('WHOLESALE')).status).toBe(400);
         expect((await submit('RETAIL', false)).status).toBe(200);
