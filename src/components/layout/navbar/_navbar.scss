@@ -1,248 +1,268 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .navbarContent {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background-color: $primary-color;
-    border-bottom: 1px solid rgba($border-color, 0.12);
-    color: $color-text-secondary;
-    box-shadow: 0 3px 12px rgba($border-color, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $primary-color;
+  border-bottom: 1px solid rgba($border-color, 0.12);
+  color: $color-text-secondary;
+  box-shadow: 0 3px 12px rgba($border-color, 0.04);
 
-    .navbarInner {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        max-width: 1280px;
-        min-height: 64px;
-        margin: 0 auto;
-        padding: 0.625rem 1.5rem;
+  .navbarInner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1280px;
+    min-height: 64px;
+    margin: 0 auto;
+    padding: 0.625rem 1.5rem;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  a,
+  button,
+  input {
+    &:focus-visible {
+      outline: 2px solid $secondary-color;
+      outline-offset: 4px;
     }
+  }
 
-    a {
-        color: inherit;
-        text-decoration: none;
-        transition: all 0.3s ease-in-out;
-    }
+  .navbarBrand {
+    flex-shrink: 0;
+    margin-right: 1.5rem;
+    font-family: $font-family-display;
+    font-size: $font-size-large;
+    font-weight: $font-weight-semibold;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
 
-    a,
-    button,
-    input {
-        &:focus-visible {
-            outline: 2px solid $secondary-color;
-            outline-offset: 4px;
+  .navbarMenu {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+
+    .navbarLinks {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+
+      .navbarLink {
+        padding: 0.75rem 0;
+        color: rgba($color-text, 0.8);
+        font-size: $font-size-normal;
+        font-weight: $font-weight-semibold;
+        white-space: nowrap;
+
+        &:hover {
+          color: $secondary-color;
+          text-decoration: underline;
+          text-underline-offset: 4px;
         }
+      }
+    }
+
+    .navbarSearch {
+      width: 224px;
+
+      .navbarSearchInput {
+        width: 100%;
+        min-height: 40px;
+        padding: 0.625rem 0.875rem;
+        border: 1px solid rgba($border-color, 0.15);
+        border-radius: 6px;
+        background-color: #faf9f4;
+        color: $color-text;
+        font-size: $font-size-normal;
+
+        &::placeholder {
+          color: rgba($color-text, 0.65);
+        }
+      }
+    }
+  }
+
+  .navbarAccount,
+  .navbarConsultation,
+  .navbarMenuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid $border-color;
+    border-radius: 6px;
+    background-color: transparent;
+    color: $color-text-secondary;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-bold;
+    line-height: 1.5;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+
+    &:hover {
+      background-color: $secondary-color;
+      color: $primary-color;
+    }
+  }
+
+  .navbarConsultation {
+    flex-shrink: 0;
+
+    .navbarCount {
+      min-width: 24px;
+      padding: 0 0.375rem;
+      border-radius: 999px;
+      background-color: $secondary-color;
+      color: $primary-color;
+      font-size: $font-size-small;
+      line-height: 1.4;
+      text-align: center;
+    }
+  }
+
+  .navbarAccount {
+    flex-shrink: 0;
+    min-height: 44px;
+    white-space: nowrap;
+    border-color: rgba($border-color, 0.25);
+
+    svg {
+      flex-shrink: 0;
+    }
+  }
+
+  .navbarMenuButton {
+    display: none;
+    cursor: pointer;
+  }
+
+  @media (max-width: 1200px) {
+    .navbarInner {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      gap: 0.625rem 0.75rem;
+      padding: 0.75rem 0.875rem;
     }
 
     .navbarBrand {
-        flex-shrink: 0;
-        margin-right: 1.5rem;
-        font-family: $font-family-display;
-        font-size: $font-size-large;
-        font-weight: $font-weight-semibold;
-        letter-spacing: 0.04em;
-        line-height: 1.3;
-    }
-
-    .navbarMenu {
-        display: flex;
-        flex: 1;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1.5rem;
-
-        .navbarLinks {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-
-            .navbarLink {
-                padding: 0.75rem 0;
-                color: rgba($color-text, 0.8);
-                font-size: $font-size-normal;
-                font-weight: $font-weight-semibold;
-                white-space: nowrap;
-
-                &:hover {
-                    color: $secondary-color;
-                    text-decoration: underline;
-                    text-underline-offset: 4px;
-                }
-            }
-        }
-
-        .navbarSearch {
-            width: 224px;
-
-            .navbarSearchInput {
-                width: 100%;
-                min-height: 40px;
-                padding: 0.625rem 0.875rem;
-                border: 1px solid rgba($border-color, 0.15);
-                border-radius: 6px;
-                background-color: #faf9f4;
-                color: $color-text;
-                font-size: $font-size-normal;
-
-                &::placeholder {
-                    color: rgba($color-text, 0.65);
-                }
-            }
-        }
-    }
-
-    .navbarAccount,
-    .navbarConsultation,
-    .navbarMenuButton {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        min-height: 40px;
-        padding: 0.625rem 0.75rem;
-        border: 1px solid $border-color;
-        border-radius: 6px;
-        background-color: transparent;
-        color: $color-text-secondary;
-        font-size: $font-size-normal;
-        font-weight: $font-weight-bold;
-        line-height: 1.5;
-        transition: background-color 0.3s ease, color 0.3s ease;
-
-        &:hover {
-            background-color: $secondary-color;
-            color: $primary-color;
-        }
-    }
-
-    .navbarConsultation {
-        flex-shrink: 0;
-
-        .navbarCount {
-            min-width: 24px;
-            padding: 0 0.375rem;
-            border-radius: 999px;
-            background-color: $secondary-color;
-            color: $primary-color;
-            font-size: $font-size-small;
-            line-height: 1.4;
-            text-align: center;
-        }
+      grid-column: 1 / -1;
+      grid-row: 1;
+      justify-self: center;
+      max-width: none;
+      margin: 0;
+      padding: 0.125rem 0 0.375rem;
+      font-size: 24px;
+      line-height: 1.3;
+      white-space: nowrap;
     }
 
     .navbarAccount {
-        flex-shrink: 0;
-        min-height: 44px;
-        white-space: nowrap;
-        border-color: rgba($border-color, 0.25);
+      grid-column: 1;
+      grid-row: 2;
+      width: 44px;
+      padding: 0;
 
-        svg {
-            flex-shrink: 0;
-        }
+      span {
+        display: none;
+      }
+    }
+
+    .navbarConsultation {
+      grid-column: 2;
+      grid-row: 2;
+      min-height: 44px;
+      margin: 0;
     }
 
     .navbarMenuButton {
-        display: none;
-        cursor: pointer;
+      display: flex;
+      grid-column: 3;
+      grid-row: 2;
+      min-height: 44px;
+      border-width: 2px;
+      border-radius: 9px;
     }
 
-    @media (max-width: 1200px) {
-        .navbarInner {
-            display: grid;
-            grid-template-columns: 44px minmax(0, 1fr) auto;
-            gap: 0.625rem 0.75rem;
-            padding: 0.75rem 0.875rem;
+    .navbarMenu {
+      display: none;
+      grid-column: 1 / -1;
+      grid-row: 3;
+      gap: 0.5rem;
+      padding: 0.75rem 0 1rem;
+      border-top: 1px solid rgba($border-color, 0.12);
+      max-height: calc(100dvh - 130px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+
+      &.navbarMenuOpen {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .navbarSearch {
+        order: -1;
+        width: 100%;
+
+        .navbarSearchInput {
+          min-height: 44px;
+          font-size: $font-size-medium;
         }
+      }
 
-        .navbarBrand {
-            grid-column: 1 / -1;
-            grid-row: 1;
-            justify-self: center;
-            max-width: none;
-            margin: 0;
-            padding: 0.125rem 0 0.375rem;
-            font-size: 24px;
-            line-height: 1.3;
-            white-space: nowrap;
+      .navbarLinks {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+
+        .navbarLink {
+          padding: 0.75rem;
         }
-
-        .navbarAccount {
-            grid-column: 1;
-            grid-row: 2;
-            width: 44px;
-            padding: 0;
-
-            span {
-                display: none;
-            }
-        }
-
-        .navbarConsultation {
-            grid-column: 2;
-            grid-row: 2;
-            min-height: 44px;
-            margin: 0;
-        }
-
-        .navbarMenuButton {
-            display: flex;
-            grid-column: 3;
-            grid-row: 2;
-            min-height: 44px;
-            border-width: 2px;
-            border-radius: 9px;
-        }
-
-        .navbarMenu {
-            display: none;
-            grid-column: 1 / -1;
-            grid-row: 3;
-            gap: 0.5rem;
-            padding: 0.75rem 0 1rem;
-            border-top: 1px solid rgba($border-color, 0.12);
-            max-height: calc(100dvh - 130px);
-            overflow-y: auto;
-            overscroll-behavior: contain;
-
-            &.navbarMenuOpen {
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .navbarSearch {
-                order: -1;
-                width: 100%;
-
-                .navbarSearchInput {
-                    min-height: 44px;
-                    font-size: $font-size-medium;
-                }
-            }
-
-            .navbarLinks {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 0;
-
-                .navbarLink {
-                    padding: 0.75rem;
-                }
-            }
-        }
+      }
     }
+  }
 
-    @media (min-width: 601px) and (max-width: 1200px) {
-        .navbarInner { grid-template-columns: minmax(0, 1fr) 44px auto auto; }
-        .navbarBrand { grid-column: 1; grid-row: 1; justify-self: start; padding: 0; }
-        .navbarAccount { grid-column: 2; grid-row: 1; }
-        .navbarConsultation { grid-column: 3; grid-row: 1; }
-        .navbarMenuButton { grid-column: 4; grid-row: 1; }
-        .navbarMenu { grid-row: 2; max-height: calc(100dvh - 90px); }
+  @media (min-width: 601px) and (max-width: 1200px) {
+    .navbarInner {
+      grid-template-columns: minmax(0, 1fr) 44px auto auto;
     }
-
+    .navbarBrand {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
+      padding: 0;
+    }
+    .navbarAccount {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .navbarConsultation {
+      grid-column: 3;
+      grid-row: 1;
+    }
+    .navbarMenuButton {
+      grid-column: 4;
+      grid-row: 1;
+    }
+    .navbarMenu {
+      grid-row: 2;
+      max-height: calc(100dvh - 90px);
+    }
+  }
 }
 
 .featuredDescription {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }

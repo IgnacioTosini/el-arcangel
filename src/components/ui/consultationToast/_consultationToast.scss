@@ -1,32 +1,82 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .Toastify__toast.consultationToast {
-    background: $primary-color;
+  background: $primary-color;
+  color: $color-text-secondary;
+  padding: 1rem;
+  border: 1px solid rgba($border-color, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba($border-color, 0.16);
+  font-family: $font-family;
+  --toastify-color-success: #2b493c;
+  --toastify-color-info: #2b493c;
+  --toastify-color-warning: #957437;
+  --toastify-color-error: #a13b32;
+  .Toastify__close-button {
     color: $color-text-secondary;
-    padding: 1rem;
-    border: 1px solid rgba($border-color,.18);
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba($border-color,.16);
-    font-family: $font-family;
-    --toastify-color-success: #2b493c;
-    --toastify-color-info: #2b493c;
-    --toastify-color-warning: #957437;
-    --toastify-color-error: #a13b32;
-    .Toastify__close-button { color: $color-text-secondary; }
-    .Toastify__progress-bar { background: $secondary-color; }
-    &.Toastify__toast--error .Toastify__progress-bar { background: var(--toastify-color-error); }
-    &.Toastify__toast--warning .Toastify__progress-bar { background: var(--toastify-color-warning); }
+  }
+  .Toastify__progress-bar {
+    background: $secondary-color;
+  }
+  &.Toastify__toast--error .Toastify__progress-bar {
+    background: var(--toastify-color-error);
+  }
+  &.Toastify__toast--warning .Toastify__progress-bar {
+    background: var(--toastify-color-warning);
+  }
 }
 .consultationToastContent {
-    display: flex; align-items: flex-start; gap: .75rem; width: 100%; padding-right: 1rem;
-    .consultationToastIcon { display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: $secondary-color; color: $primary-color; }
-    .consultationToastText { min-width: 0; font-size: $font-size-normal; line-height: 1.5; }
-    strong { display: block; font-weight: $font-weight-semibold; }
-    p { margin: .25rem 0 .5rem; overflow-wrap: anywhere; color: rgba($color-text, .7); }
-    a { display: inline-flex; align-items: center; gap: .5rem; color: $secondary-color; font-weight: $font-weight-semibold; text-underline-offset: 3px; }
-    a:focus-visible { outline: 2px solid $secondary-color; outline-offset: 3px; }
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  width: 100%;
+  padding-right: 1rem;
+  .consultationToastIcon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: $secondary-color;
+    color: $primary-color;
+  }
+  .consultationToastText {
+    min-width: 0;
+    font-size: $font-size-normal;
+    line-height: 1.5;
+  }
+  strong {
+    display: block;
+    font-weight: $font-weight-semibold;
+  }
+  p {
+    margin: 0.25rem 0 0.5rem;
+    overflow-wrap: anywhere;
+    color: rgba($color-text, 0.7);
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $secondary-color;
+    font-weight: $font-weight-semibold;
+    text-underline-offset: 3px;
+  }
+  a:focus-visible {
+    outline: 2px solid $secondary-color;
+    outline-offset: 3px;
+  }
 }
 @media (max-width: 480px) {
-    .Toastify__toast-container.Toastify__toast-container--bottom-right { width: calc(100% - 1.5rem); left: .75rem; right: .75rem; bottom: max(.75rem, env(safe-area-inset-bottom)); padding: 0; }
-    .Toastify__toast.consultationToast { margin-bottom: 0; }
+  .Toastify__toast-container.Toastify__toast-container--bottom-right {
+    width: calc(100% - 1.5rem);
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    padding: 0;
+  }
+  .Toastify__toast.consultationToast {
+    margin-bottom: 0;
+  }
 }

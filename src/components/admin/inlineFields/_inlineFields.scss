@@ -1,16 +1,68 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .inlineFieldsContent {
-    .inlineFieldsActions {
-        display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem;
-        padding-top: 1rem; margin-top: 0.5rem; border-top: 1px solid rgba($border-color, 0.18);
-        p { flex: 1; min-width: 180px; font-size: $font-size-normal; }
-        button { min-height: 44px; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .inlineFieldsActions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba($border-color, 0.18);
+    p {
+      flex: 1;
+      min-width: 180px;
+      font-size: $font-size-normal;
     }
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem;
-    .inlineField { min-width: 0; display: flex; flex-direction: column; gap: 0.375rem; label { font-size: $font-size-normal; } input:not([type='checkbox']), textarea { width: 100%; min-height: 44px; padding: 0.625rem 0.75rem; border: 1px solid rgba($border-color,0.18); border-radius: 5px; background: transparent; color: $color-text-secondary; font-size: $font-size-normal; } textarea { resize: vertical; } }
-    .inlineFieldFull { grid-column: 1 / -1; }
-    .inlineFieldCheck { flex-direction: row-reverse; justify-content: flex-end; align-items: center; min-height: 44px; input { width: 16px; height: 16px; accent-color: $border-color; } }
-    @media (max-width: 540px) { grid-template-columns: minmax(0, 1fr); }
+    button {
+      min-height: 44px;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  .inlineField {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    label {
+      font-size: $font-size-normal;
+    }
+    input:not([type="checkbox"]),
+    textarea {
+      width: 100%;
+      min-height: 44px;
+      padding: 0.625rem 0.75rem;
+      border: 1px solid rgba($border-color, 0.18);
+      border-radius: 5px;
+      background: transparent;
+      color: $color-text-secondary;
+      font-size: $font-size-normal;
+    }
+    textarea {
+      resize: vertical;
+    }
+  }
+  .inlineFieldFull {
+    grid-column: 1 / -1;
+  }
+  .inlineFieldCheck {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 44px;
+    input {
+      width: 16px;
+      height: 16px;
+      accent-color: $border-color;
+    }
+  }
+  @media (max-width: 540px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

@@ -1,16 +1,76 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 .wholesaleAccount {
-    max-width: 540px; margin: 3rem auto; padding: 2rem; border: 1px solid rgba($border-color,.2); border-radius: 16px; background: #faf9f4;
-    h1 { font-family: $font-family-display; font-size: 36px; line-height: 1.15; margin: .75rem 0; }
-    p { line-height: 1.6; margin-bottom: 1rem; }
-    .wholesaleAccountEyebrow { font-size: 12px; letter-spacing: .1em; }
-    fieldset { border: 0; padding: 0; display: grid; gap: 1rem; }
-    label { display: grid; gap: .4rem; font-size: 14px; }
-    input { width: 100%; min-height: 44px; padding: .65rem; border: 1px solid rgba($border-color,.25); border-radius: 6px; background: $primary-color; color: $secondary-color; font: inherit; }
-    button { min-height: 44px; padding: .65rem 1rem; border: 1px solid $secondary-color; border-radius: 6px; background: $secondary-color; color: white; font: inherit; cursor: pointer; }
-    button:disabled { opacity: .6; cursor: wait; }
-    .wholesaleAccountSwitch { margin-top: 1rem; background: transparent; color: $secondary-color; width: 100%; }
-    [role=alert] { color: #a13b32; margin-top: 1rem; }
-    :focus-visible { outline: 2px solid $secondary-color; outline-offset: 3px; }
-    @media(max-width: 600px) { margin: 1.5rem 1rem; padding: 1.25rem; }
+  max-width: 540px;
+  margin: 3rem auto;
+  padding: 2rem;
+  border: 1px solid rgba($border-color, 0.2);
+  border-radius: 16px;
+  background: #faf9f4;
+  h1 {
+    font-family: $font-family-display;
+    font-size: 36px;
+    line-height: 1.15;
+    margin: 0.75rem 0;
+  }
+  p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .wholesaleAccountEyebrow {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+  }
+  fieldset {
+    border: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  label {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 14px;
+  }
+  input {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.65rem;
+    border: 1px solid rgba($border-color, 0.25);
+    border-radius: 6px;
+    background: $primary-color;
+    color: $secondary-color;
+    font: inherit;
+  }
+  button {
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    border: 1px solid $secondary-color;
+    border-radius: 6px;
+    background: $secondary-color;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+  }
+  button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  .wholesaleAccountSwitch {
+    margin-top: 1rem;
+    background: transparent;
+    color: $secondary-color;
+    width: 100%;
+  }
+  [role="alert"] {
+    color: #a13b32;
+    margin-top: 1rem;
+  }
+  :focus-visible {
+    outline: 2px solid $secondary-color;
+    outline-offset: 3px;
+  }
+  @media (max-width: 600px) {
+    margin: 1.5rem 1rem;
+    padding: 1.25rem;
+  }
 }

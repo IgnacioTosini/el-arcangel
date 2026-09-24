@@ -1,11 +1,28 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .customerFormContent {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    label { font-size: $font-size-normal; }
-    input, textarea { width: 100%; padding: 0.75rem; border: 1px solid rgba($border-color, 0.18); border-radius: 6px; background: #faf9f4; color: $color-text-secondary; font-size: $font-size-medium; }
-    input { min-height: 44px; margin-bottom: 0.5rem; }
-    textarea { resize: vertical; min-height: 112px; }
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  label {
+    font-size: $font-size-normal;
+  }
+  input,
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba($border-color, 0.18);
+    border-radius: 6px;
+    background: #faf9f4;
+    color: $color-text-secondary;
+    font-size: $font-size-medium;
+  }
+  input {
+    min-height: 44px;
+    margin-bottom: 0.5rem;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 112px;
+  }
 }

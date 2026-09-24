@@ -1,52 +1,52 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .aboutContent {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 6.5rem;
+  text-align: center;
+
+  .aboutTitle {
+    color: $color-text-secondary;
+    font-family: $font-family-display;
+    font-size: $font-size-xlarge;
+    font-weight: $font-weight-medium;
+    line-height: 1.2;
+  }
+
+  .aboutDescription {
+    color: rgba($color-text, 0.7);
+    font-family: $font-family;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-regular;
+    line-height: 1.5;
+  }
+
+  .aboutInstagram {
+    display: inline-flex;
     align-items: center;
-    gap: 1rem;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 4rem 1.5rem 6.5rem;
-    text-align: center;
+    min-height: 44px;
+    color: $color-text-secondary;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-medium;
+    text-underline-offset: 4px;
 
-    .aboutTitle {
-        color: $color-text-secondary;
-        font-family: $font-family-display;
-        font-size: $font-size-xlarge;
-        font-weight: $font-weight-medium;
-        line-height: 1.2;
+    &:hover {
+      color: $color-hover-primary;
+      text-decoration-thickness: 2px;
     }
 
-    .aboutDescription {
-        color: rgba($color-text, 0.7);
-        font-family: $font-family;
-        font-size: $font-size-medium;
-        font-weight: $font-weight-regular;
-        line-height: 1.5;
+    &:focus-visible {
+      outline: 2px solid $secondary-color;
+      outline-offset: 4px;
     }
+  }
 
-    .aboutInstagram {
-        display: inline-flex;
-        align-items: center;
-        min-height: 44px;
-        color: $color-text-secondary;
-        font-size: $font-size-medium;
-        font-weight: $font-weight-medium;
-        text-underline-offset: 4px;
-
-        &:hover {
-            color: $color-hover-primary;
-            text-decoration-thickness: 2px;
-        }
-
-        &:focus-visible {
-            outline: 2px solid $secondary-color;
-            outline-offset: 4px;
-        }
-    }
-
-    @media (max-width: 600px) {
-        padding: 2.5rem 1rem 4rem;
-    }
+  @media (max-width: 600px) {
+    padding: 2.5rem 1rem 4rem;
+  }
 }

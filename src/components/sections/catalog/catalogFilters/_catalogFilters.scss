@@ -1,93 +1,99 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .catalogFiltersContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  fieldset {
+    min-width: 0;
+    border: 0;
+  }
+
+  .catalogFiltersOptions {
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
-    fieldset {
-        min-width: 0;
-        border: 0;
+  label {
+    position: relative;
+    cursor: pointer;
+
+    input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
     }
 
-    .catalogFiltersOptions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+    span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0.375rem 0.875rem;
+      font-size: $font-size-normal;
+      line-height: 1.5;
     }
 
-    label {
-        position: relative;
-        cursor: pointer;
+    input:focus-visible + span {
+      outline: 2px solid $secondary-color;
+      outline-offset: 3px;
+    }
+  }
 
-        input {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-        }
-
-        span {
-            display: inline-flex;
-            align-items: center;
-            min-height: 36px;
-            padding: 0.375rem 0.875rem;
-            font-size: $font-size-normal;
-            line-height: 1.5;
-        }
-
-        input:focus-visible + span {
-            outline: 2px solid $secondary-color;
-            outline-offset: 3px;
-        }
+  .catalogFiltersCategories {
+    legend {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
     }
 
-    .catalogFiltersCategories {
-        legend {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            clip-path: inset(50%);
-        }
+    span {
+      border: 1px solid rgba($border-color, 0.15);
+      border-radius: 999px;
+    }
 
-        span {
-            border: 1px solid rgba($border-color, 0.15);
-            border-radius: 999px;
-        }
+    input:checked + span {
+      background-color: $color-primary-button;
+      color: $primary-color;
+    }
+  }
 
-        input:checked + span {
-            background-color: $color-primary-button;
-            color: $primary-color;
-        }
+  .catalogFiltersSort {
+    legend {
+      float: left;
+      padding: 0.375rem 0.5rem 0.375rem 0;
+      font-size: $font-size-medium;
+      line-height: 1.5;
+    }
+
+    span {
+      padding-inline: 0;
+      color: rgba($color-text, 0.7);
+    }
+
+    input:checked + span {
+      color: $color-text-secondary;
+      text-decoration: underline;
+      text-underline-offset: 5px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    label span {
+      min-height: 44px;
     }
 
     .catalogFiltersSort {
-        legend {
-            float: left;
-            padding: 0.375rem 0.5rem 0.375rem 0;
-            font-size: $font-size-medium;
-            line-height: 1.5;
-        }
-
-        span {
-            padding-inline: 0;
-            color: rgba($color-text, 0.7);
-        }
-
-        input:checked + span {
-            color: $color-text-secondary;
-            text-decoration: underline;
-            text-underline-offset: 5px;
-        }
+      legend {
+        float: none;
+      }
+      .catalogFiltersOptions {
+        flex-direction: column;
+      }
     }
-
-    @media (max-width: 700px) {
-        label span { min-height: 44px; }
-
-        .catalogFiltersSort {
-            legend { float: none; }
-            .catalogFiltersOptions { flex-direction: column; }
-        }
-    }
+  }
 }

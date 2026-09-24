@@ -1,34 +1,42 @@
-'use client';
-import Image from 'next/image';
-import Link from 'next/link';
+"use client";
+import Image from "next/image";
+import Link from "next/link";
 
-import { useAnimation } from '@/lib/use-animation';
+import { useAnimation } from "@/lib/use-animation";
 
-import { animateCategoryCard } from './categoryCard.animation';
+import { animateCategoryCard } from "./categoryCard.animation";
 
-import './_categoryCard.scss';
+import "./_categoryCard.scss";
 
 export type CategoryCardProps = {
-    name: string;
-    slug: string;
-    imageUrl: string;
+  name: string;
+  slug: string;
+  imageUrl: string;
 };
 
-export default function CategoryCard({ name, slug, imageUrl }: CategoryCardProps) {
-    const animationRef = useAnimation<HTMLAnchorElement>(animateCategoryCard);
-    return (
-        <Link ref={animationRef} href={`/catalogo?categoria=${encodeURIComponent(slug)}`} className="categoryCardContent">
-            <picture className="categoryCardPicture">
-                <Image
-                    src={imageUrl}
-                    alt=""
-                    className="categoryCardImage"
-                    width={640}
-                    height={640}
-                    sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, (max-width: 1280px) 20vw, 234px"
-                />
-            </picture>
-            <h3 className="categoryCardTitle">{name}</h3>
-        </Link>
-    );
+export default function CategoryCard({
+  name,
+  slug,
+  imageUrl,
+}: CategoryCardProps) {
+  const animationRef = useAnimation<HTMLAnchorElement>(animateCategoryCard);
+  return (
+    <Link
+      ref={animationRef}
+      href={`/catalogo?categoria=${encodeURIComponent(slug)}`}
+      className="categoryCardContent"
+    >
+      <picture className="categoryCardPicture">
+        <Image
+          src={imageUrl}
+          alt=""
+          className="categoryCardImage"
+          width={640}
+          height={640}
+          sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, (max-width: 1280px) 20vw, 234px"
+        />
+      </picture>
+      <h3 className="categoryCardTitle">{name}</h3>
+    </Link>
+  );
 }

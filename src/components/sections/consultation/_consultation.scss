@@ -1,178 +1,203 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .consultationContent {
-    .consultationUnavailable {
-        padding: 1rem; margin-top: 1rem; border: 1px solid rgba($border-color, 0.2); border-radius: 8px;
-        h2, h3 { font-family: $font-family-display; }
-        h2 { font-size: 26px; margin-bottom: 0.5rem; }
-        h3 { font-size: 21px; }
-        p { line-height: 1.6; }
-        ul { list-style: none; margin: 1rem 0; padding: 0; }
-        li { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; padding: 0.75rem 0; border-top: 1px solid rgba($border-color, 0.12); }
+  .consultationUnavailable {
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid rgba($border-color, 0.2);
+    border-radius: 8px;
+    h2,
+    h3 {
+      font-family: $font-family-display;
     }
-    max-width: 1088px;
-    margin: 0 auto;
-    padding: 3rem 1.5rem 6rem;
-    color: $color-text-secondary;
-
-    input:focus-visible,
-    textarea:focus-visible,
-    button:focus-visible,
-    a:focus-visible,
-    pre:focus-visible {
-        outline: 2px solid $secondary-color;
-        outline-offset: 3px;
+    h2 {
+      font-size: 26px;
+      margin-bottom: 0.5rem;
     }
-
-    .consultationHeader {
-        margin-bottom: 1.5rem;
-
-        h1 {
-            margin-bottom: 0.75rem;
-            font-family: $font-family-display;
-            font-size: 40px;
-            font-weight: $font-weight-medium;
-        }
-
-        p {
-            color: rgba($color-text, 0.7);
-            font-size: $font-size-medium;
-            line-height: 1.6;
-        }
+    h3 {
+      font-size: 21px;
     }
+    p {
+      line-height: 1.6;
+    }
+    ul {
+      list-style: none;
+      margin: 1rem 0;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-top: 1px solid rgba($border-color, 0.12);
+    }
+  }
+  max-width: 1088px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+  color: $color-text-secondary;
 
-    .consultationAccountBar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid rgba($border-color, 0.15);
+  input:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible,
+  a:focus-visible,
+  pre:focus-visible {
+    outline: 2px solid $secondary-color;
+    outline-offset: 3px;
+  }
 
-        p {
-            line-height: 1.6;
-        }
+  .consultationHeader {
+    margin-bottom: 1.5rem;
 
-        .consultationAccountLink {
-            gap: 0.65rem;
-            border-color: rgba($border-color, 0.3);
-            font-weight: $font-weight-semibold;
-
-            svg {
-                flex-shrink: 0;
-            }
-
-            &:hover {
-                border-color: $border-color;
-            }
-        }
+    h1 {
+      margin-bottom: 0.75rem;
+      font-family: $font-family-display;
+      font-size: 40px;
+      font-weight: $font-weight-medium;
     }
 
-    .consultationItems {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        list-style: none;
+    p {
+      color: rgba($color-text, 0.7);
+      font-size: $font-size-medium;
+      line-height: 1.6;
+    }
+  }
+
+  .consultationAccountBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba($border-color, 0.15);
+
+    p {
+      line-height: 1.6;
     }
 
-    .consultationSummary {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin: 1.5rem 0 2.5rem;
-        padding: 1rem;
-        border-radius: 12px;
-        background: $tertiary-color;
+    .consultationAccountLink {
+      gap: 0.65rem;
+      border-color: rgba($border-color, 0.3);
+      font-weight: $font-weight-semibold;
 
-        p {
-            flex: 1;
-            font-size: $font-size-normal;
-            line-height: 1.6;
-        }
+      svg {
+        flex-shrink: 0;
+      }
 
-        strong {
-            font-size: $font-size-medium-large;
-            white-space: nowrap;
-        }
-
-        button {
-            min-height: 44px;
-            padding: 0.5rem;
-            border: 0;
-            background: transparent;
-            color: inherit;
-            cursor: pointer;
-        }
+      &:hover {
+        border-color: $border-color;
+      }
     }
+  }
+
+  .consultationItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+  }
+
+  .consultationSummary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0 2.5rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background: $tertiary-color;
+
+    p {
+      flex: 1;
+      font-size: $font-size-normal;
+      line-height: 1.6;
+    }
+
+    strong {
+      font-size: $font-size-medium-large;
+      white-space: nowrap;
+    }
+
+    button {
+      min-height: 44px;
+      padding: 0.5rem;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+    }
+  }
+
+  .consultationColumns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .consultationEmpty {
+    padding: 3rem 1rem;
+    text-align: center;
+
+    h2 {
+      font-family: $font-family-display;
+      font-size: 28px;
+    }
+
+    p {
+      margin: 1rem 0 1.5rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    padding: 2rem 1rem 4rem;
 
     .consultationColumns {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.5rem;
-        align-items: start;
+      grid-template-columns: minmax(0, 1fr);
     }
-
-    .consultationEmpty {
-        padding: 3rem 1rem;
-        text-align: center;
-
-        h2 {
-            font-family: $font-family-display;
-            font-size: 28px;
-        }
-
-        p {
-            margin: 1rem 0 1.5rem;
-        }
-    }
-
-    @media (max-width: 700px) {
-        padding: 2rem 1rem 4rem;
-
-        .consultationColumns {
-            grid-template-columns: minmax(0, 1fr);
-        }
-    }
+  }
 }
 
 .consultationButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.75rem 1rem;
-    border: 1px solid $border-color;
-    border-radius: 6px;
-    background: transparent;
-    color: $color-text-secondary;
-    font-size: $font-size-normal;
-    text-decoration: none;
-    cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  background: transparent;
+  color: $color-text-secondary;
+  font-size: $font-size-normal;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: $tertiary-color;
+  }
+
+  &.consultationButtonPrimary {
+    background: $color-primary-button;
+    color: $primary-color;
+    font-weight: $font-weight-semibold;
 
     &:hover:not(:disabled) {
-        background: $tertiary-color;
+      background: $color-hover-primary;
     }
+  }
 
-    &.consultationButtonPrimary {
-        background: $color-primary-button;
-        color: $primary-color;
-        font-weight: $font-weight-semibold;
-
-        &:hover:not(:disabled) {
-            background: $color-hover-primary;
-        }
-    }
-
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
-    .consultationWarning {
-        margin-bottom: 1.5rem;
-    }
+.consultationWarning {
+  margin-bottom: 1.5rem;
+}

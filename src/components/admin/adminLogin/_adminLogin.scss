@@ -1,21 +1,143 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .adminLoginContent {
-    min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem; padding:3rem 1rem; color:$color-text-secondary;
-    background:radial-gradient(ellipse at top left, rgba(#b39a5f,0.12), transparent 60%), $primary-color;
-    a { color:inherit; text-decoration:none; }
-    a:focus-visible, button:focus-visible, input:focus-visible { outline:2px solid $secondary-color; outline-offset:4px; }
-    .adminLoginBrand { font-family:$font-family-display; font-size:28px; letter-spacing:0.08em; }
-    .adminLoginCard { width:100%; max-width:460px; padding:2.5rem; border:1px solid rgba($border-color,0.15); border-radius:20px; background:#faf9f4; box-shadow:0 16px 60px rgba($border-color,0.06); }
-    .adminLoginMark { display:grid; place-items:center; width:48px; height:48px; margin-bottom:1.5rem; border-radius:50%; background:$border-color; color:#c3ab71; font-size:32px; }
-    .adminLoginEyebrow { margin-bottom:0.75rem; font-size:11px; letter-spacing:0.15em; }
-    h1 { font-family:$font-family-display; font-size:36px; font-weight:500; line-height:1.15; }
-    .adminLoginDescription { margin:1rem 0 2rem; color:rgba($color-text,0.65); font-size:16px; line-height:1.6; }
-    label { display:block; margin-bottom:0.5rem; font-size:14px; font-weight:600; }
-    .adminLoginPassword { display:flex; border:1px solid rgba($border-color,0.25); border-radius:8px; input { width:100%; min-width:0; padding:0.875rem; border:0; border-radius:8px; background:transparent; color:inherit; font-size:16px; } button { padding:0.75rem; border:0; background:transparent; color:inherit; font-size:12px; cursor:pointer; } }
-    .adminLoginError { min-height:1.5rem; margin:0.5rem 0; color:#a52b2b; font-size:14px; line-height:1.5; }
-    .adminLoginSubmit { width:100%; min-height:48px; padding:0.75rem; border:0; border-radius:8px; background:$border-color; color:$primary-color; font-size:15px; font-weight:600; cursor:pointer; &:hover:not(:disabled) { background:$color-hover-primary; } &:disabled { opacity:0.6; cursor:wait; } }
-    .adminLoginFootnote { margin-top:1.5rem; text-align:center; font-size:12px; color:rgba($color-text,0.6); line-height:1.5; }
-    .adminLoginBack { font-size:14px; &:hover { text-decoration:underline; } }
-    @media(max-width:480px) { .adminLoginCard { padding:1.75rem; } h1 { font-size:32px; } }
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1rem;
+  color: $color-text-secondary;
+  background:
+    radial-gradient(ellipse at top left, rgba(#b39a5f, 0.12), transparent 60%),
+    $primary-color;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid $secondary-color;
+    outline-offset: 4px;
+  }
+  .adminLoginBrand {
+    font-family: $font-family-display;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+  }
+  .adminLoginCard {
+    width: 100%;
+    max-width: 460px;
+    padding: 2.5rem;
+    border: 1px solid rgba($border-color, 0.15);
+    border-radius: 20px;
+    background: #faf9f4;
+    box-shadow: 0 16px 60px rgba($border-color, 0.06);
+  }
+  .adminLoginMark {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.5rem;
+    border-radius: 50%;
+    background: $border-color;
+    color: #c3ab71;
+    font-size: 32px;
+  }
+  .adminLoginEyebrow {
+    margin-bottom: 0.75rem;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+  }
+  h1 {
+    font-family: $font-family-display;
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+  .adminLoginDescription {
+    margin: 1rem 0 2rem;
+    color: rgba($color-text, 0.65);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .adminLoginPassword {
+    display: flex;
+    border: 1px solid rgba($border-color, 0.25);
+    border-radius: 8px;
+    input {
+      width: 100%;
+      min-width: 0;
+      padding: 0.875rem;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 16px;
+    }
+    button {
+      padding: 0.75rem;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+  .adminLoginError {
+    min-height: 1.5rem;
+    margin: 0.5rem 0;
+    color: #a52b2b;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .adminLoginSubmit {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem;
+    border: 0;
+    border-radius: 8px;
+    background: $border-color;
+    color: $primary-color;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover:not(:disabled) {
+      background: $color-hover-primary;
+    }
+    &:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+  }
+  .adminLoginFootnote {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 12px;
+    color: rgba($color-text, 0.6);
+    line-height: 1.5;
+  }
+  .adminLoginBack {
+    font-size: 14px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  @media (max-width: 480px) {
+    .adminLoginCard {
+      padding: 1.75rem;
+    }
+    h1 {
+      font-size: 32px;
+    }
+  }
 }

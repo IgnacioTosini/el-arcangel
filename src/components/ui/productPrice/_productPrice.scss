@@ -1,9 +1,15 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 
 .productPrice {
-    display: inline-flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: .5rem;
-    del { color: rgba($color-text, .65); font-size: .85em; font-weight: 400; text-decoration: line-through; text-decoration-thickness: 1px; }
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  del {
+    color: rgba($color-text, 0.65);
+    font-size: 0.85em;
+    font-weight: 400;
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
 }

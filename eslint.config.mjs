@@ -6,20 +6,42 @@ const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
   {
-    plugins: { import: nextVitals.find(config => config.plugins?.import).plugins.import },
+    plugins: {
+      import: nextVitals.find((config) => config.plugins?.import).plugins
+        .import,
+    },
     rules: {
       "import/first": "error",
-      "import/order": ["error", {
-        groups: ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
-        pathGroups: [{ pattern: "@/**", group: "internal" }],
-        pathGroupsExcludedImportTypes: ["builtin", "type"],
-        alphabetize: { order: "asc", caseInsensitive: true },
-        "newlines-between": "always",
-      }],
-      "sort-imports": ["error", { ignoreDeclarationSort: true, ignoreCase: true }],
+      "import/order": [
+        "error",
+        {
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type",
+          ],
+          pathGroups: [{ pattern: "@/**", group: "internal" }],
+          pathGroupsExcludedImportTypes: ["builtin", "type"],
+          alphabetize: { order: "asc", caseInsensitive: true },
+          "newlines-between": "always",
+        },
+      ],
+      "import/no-duplicates": "error",
+      "sort-imports": [
+        "error",
+        { ignoreDeclarationSort: true, ignoreCase: true },
+      ],
     },
   },
-  { files: ["check-db.cjs"], rules: { "@typescript-eslint/no-require-imports": "off" } },
+  {
+    files: ["check-db.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

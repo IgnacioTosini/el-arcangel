@@ -1,38 +1,52 @@
-'use client';
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
 
-import { useAnimation } from '@/lib/use-animation';
+import { useAnimation } from "@/lib/use-animation";
 
-import { animateActionBanner } from './actionBanner.animation';
+import { animateActionBanner } from "./actionBanner.animation";
 
-import './_actionBanner.scss';
+import "./_actionBanner.scss";
 
 type BannerAction = {
-    label: string;
-    href: string;
+  label: string;
+  href: string;
 };
 
 type ActionBannerProps = {
-    title: string;
-    description: string;
-    primaryAction: BannerAction;
-    secondaryAction?: BannerAction;
+  title: string;
+  description: string;
+  primaryAction: BannerAction;
+  secondaryAction?: BannerAction;
 };
 
-export default function ActionBanner({ title, description, primaryAction, secondaryAction }: ActionBannerProps) {
-    const animationRef = useAnimation<HTMLElement>(animateActionBanner);
-    return (
-        <section ref={animationRef} className="actionBannerContent" aria-label={title}>
-            <h2 className="actionBannerTitle">{title}</h2>
-            <p className="actionBannerDescription">{description}</p>
-            <div className="actionBannerButtons">
-                <Link href={primaryAction.href} className="actionBannerButton">{primaryAction.label}</Link>
-                {secondaryAction && (
-                    <Link href={secondaryAction.href} className="actionBannerButton actionBannerButtonSecondary">
-                        {secondaryAction.label}
-                    </Link>
-                )}
-            </div>
-        </section>
-    );
+export default function ActionBanner({
+  title,
+  description,
+  primaryAction,
+  secondaryAction,
+}: ActionBannerProps) {
+  const animationRef = useAnimation<HTMLElement>(animateActionBanner);
+  return (
+    <section
+      ref={animationRef}
+      className="actionBannerContent"
+      aria-label={title}
+    >
+      <h2 className="actionBannerTitle">{title}</h2>
+      <p className="actionBannerDescription">{description}</p>
+      <div className="actionBannerButtons">
+        <Link href={primaryAction.href} className="actionBannerButton">
+          {primaryAction.label}
+        </Link>
+        {secondaryAction && (
+          <Link
+            href={secondaryAction.href}
+            className="actionBannerButton actionBannerButtonSecondary"
+          >
+            {secondaryAction.label}
+          </Link>
+        )}
+      </div>
+    </section>
+  );
 }

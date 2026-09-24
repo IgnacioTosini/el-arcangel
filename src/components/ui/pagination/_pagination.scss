@@ -1,14 +1,51 @@
-@use '@/styles/variables' as *;
+@use "@/styles/variables" as *;
 .pagination {
-    margin-top: 1.5rem; padding: 1rem 0; color: $color-text-secondary;
-    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
-    p { font-size: 14px; }
-    .paginationButtons { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem; }
-    button { min-width: 44px; min-height: 44px; padding: .5rem .7rem; border: 1px solid rgba($border-color,.25); border-radius: 6px; background: transparent; color: inherit; cursor: pointer; font: inherit;
-        &[aria-current='page'] { background: $secondary-color; color: $primary-color; }
-        &:disabled { opacity: .4; cursor: default; }
-        &:focus-visible { outline: 2px solid $secondary-color; outline-offset: 3px; }
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+  color: $color-text-secondary;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  p {
+    font-size: 14px;
+  }
+  .paginationButtons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.5rem 0.7rem;
+    border: 1px solid rgba($border-color, 0.25);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    &[aria-current="page"] {
+      background: $secondary-color;
+      color: $primary-color;
     }
-    .paginationGap { padding: 0 .35rem; }
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+    &:focus-visible {
+      outline: 2px solid $secondary-color;
+      outline-offset: 3px;
+    }
+  }
+  .paginationGap {
+    padding: 0 0.35rem;
+  }
 }
-#catalog-results, #admin-results, #wholesale-results { scroll-margin-top: calc(var(--navbar-height, 96px) + 1rem); }
+#catalog-results,
+#admin-results,
+#wholesale-results {
+  scroll-margin-top: calc(var(--navbar-height, 96px) + 1rem);
+}
